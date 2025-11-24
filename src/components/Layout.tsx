@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Menu, Search, Flame, BookOpen, Sparkles, X, ChevronRight, Home } from 'lucide-react';
+'use client';
+
+import React, { useEffect, useRef } from 'react';
+import { Menu, Flame, BookOpen, X, ChevronRight, Home } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { PageRoute } from '../types';
+import { usePathname } from 'next/navigation';
 
 export const MouseSpotlight: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -197,7 +198,6 @@ export const MouseSpotlight: React.FC = () => {
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const pathname = usePathname();
-  const router = useRouter();
 
   const navItems = [
     { label: 'Главная', path: '/', icon: <Flame size={18} /> },
@@ -227,8 +227,8 @@ export const Header: React.FC = () => {
               key={item.path}
               href={item.path}
               className={`flex items-center gap-2 text-sm font-medium transition-colors ${item.path === '/recepty'
-                  ? (pathname.startsWith('/recepty') ? 'text-primary' : 'text-muted hover:text-white')
-                  : (pathname === item.path ? 'text-primary' : 'text-muted hover:text-white')
+                ? (pathname.startsWith('/recepty') ? 'text-primary' : 'text-muted hover:text-white')
+                : (pathname === item.path ? 'text-primary' : 'text-muted hover:text-white')
                 }`}
             >
               {item.icon}

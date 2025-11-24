@@ -1,55 +1,36 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { RecipeCard, RecipeDetailView } from '@/components/RecipeComponents.tsx';
-import { SeoHead } from '@/components/SeoHead.tsx';
-import { Breadcrumbs } from '@/components/Layout.tsx';
-import { fetchRecipeById, fetchSimilarRecipes } from '@/services/api.ts';
-import { Recipe } from '@/types.ts';
-import { extractIdFromSlug, generateRecipeSlug } from '@/utils/slug.ts';
+import React from 'react';
+import { notFound } from 'next/navigation';
+import { RecipeDetailView } from '@/components/RecipeComponents';
+import { SeoHead } from '@/components/SeoHead';
+import { Breadcrumbs } from '@/components/Layout';
+import { fetchRecipeById, fetchSimilarRecipes } from '@/services/api';
+import { extractIdFromSlug } from '@/utils/slug';
 import { generateRecipeSchema } from '@/utils/schema';
 import { siteConfig } from '@/config/site';
-import { LoadingState, NotFoundState } from '@/components/ui/States';
+import RecipePageClient from '@/components/pages/RecipePageClient';
 
-export default function RecipePage() {
-    const router = useRouter();
-    const params = useParams();
-    const slug = params.slug as string;
+interface RecipePageProps {
+    params: {
+        slug: string;
+    };
+}
+
+export default async function RecipePage({ params }: RecipePageProps) {
+    const { slug } = await params;
     const recipeId = extractIdFromSlug(slug);
 
-    const [recipe, setRecipe] = useState<Recipe | null>(null);
-    const [similarRecipes, setSimilarRecipes] = useState<Recipe[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const loadData = async () => {
-            if (!recipeId) return;
-
-            setLoading(true);
-            try {
-                const currentRecipe = await fetchRecipeById(recipeId);
-                setRecipe(currentRecipe);
-
-                if (currentRecipe) {
-                    const similar = await fetchSimilarRecipes(currentRecipe.id);
-                    setSimilarRecipes(similar);
-                }
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadData();
-    }, [recipeId]);
-
-    if (loading) {
-        return <LoadingState fullScreen />;
+    if (!recipeId) {
+        notFound();
     }
 
-    if (!recipe) return <NotFoundState message="Рецепт не найден" />;
+    // Server-side data fetching
+    const recipe = await fetchRecipeById(recipeId);
+
+    if (!recipe) {
+        notFound();
+    }
+
+    const similarRecipes = await fetchSimilarRecipes(recipe.id);
 
     // Structured Data for Recipe (Google/Yandex Snippet)
     const recipeSchema = generateRecipeSchema(recipe, siteConfig.url.current);
@@ -76,18 +57,7 @@ export default function RecipePage() {
             <RecipeDetailView recipe={recipe} />
 
             {similarRecipes.length > 0 && (
-                <section className="mt-16 border-t border-white/10 pt-10">
-                    <h2 className="text-2xl font-bold text-white mb-6">Похожие миксы</h2>
-                    <div className="flex flex-col md:grid md:grid-cols-3 gap-6">
-                        {similarRecipes.map(r => (
-                            <RecipeCard
-                                key={r.id}
-                                recipe={r}
-                                onClick={() => router.push(`/recept/${generateRecipeSlug(r)}`)}
-                            />
-                        ))}
-                    </div>
-                </section>
+                <RecipePageClient similarRecipes={similarRecipes} />
             )}
         </div>
     );
