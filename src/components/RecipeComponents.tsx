@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { generateRecipeSlug } from '@/utils/slug';
 import { Recipe, Ingredient, Collection, CollectionVariant } from '../types';
-import { Thermometer, Heart, User, Clock, Share2, PlusCircle, ListOrdered, Layers, ArrowRight, Check } from 'lucide-react';
+import { Thermometer, Heart, Clock, Share2, PlusCircle, ListOrdered, Layers, ArrowRight, Check } from 'lucide-react';
 import { SectionHeader } from './ui/SectionHeader';
 
 export const StrengthIndicator: React.FC<{ level: number }> = ({ level }) => {
