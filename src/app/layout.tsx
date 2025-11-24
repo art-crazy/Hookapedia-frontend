@@ -6,10 +6,7 @@ import YandexMetrika from '../components/YandexMetrika/YandexMetrika'
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] })
 
-export const metadata: Metadata = {
-    title: 'Хукапедия - Лучшие кальянные миксы',
-    description: 'Огромная база рецептов для кальяна, AI подбор миксов, советы по забивке.',
-}
+export { metadata } from "./metadata";
 
 export default function RootLayout({
     children,
