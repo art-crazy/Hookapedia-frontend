@@ -1,28 +1,97 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { RecipeCard } from '../../components/RecipeComponents';
-import { SeoHead } from '../../components/SeoHead';
-import { Breadcrumbs } from '../../components/Layout';
-import { fetchRecipes } from '../../services/api';
-import { getMintOptions, getFlavorOptions, getCoolingOptions } from '../../services/categories';
-import { Recipe, FilterState } from '../../types';
+import { useRouter, useParams } from 'next/navigation';
+import { RecipeCard } from '@/components/RecipeComponents';
+import { SeoHead } from '@/components/SeoHead';
+import { Breadcrumbs } from '@/components/Layout';
+import { fetchRecipes } from '@/services/api';
+import {
+    getMintOptions,
+    getFlavorOptions,
+    getCoolingOptions,
+    getStrengthBySlug,
+    getFlavorBySlug,
+    getCoolingBySlug,
+    getMintBySlug
+} from '@/services/categories';
+import { Recipe, FilterState } from '@/types';
 import { Search, Loader2, Filter } from 'lucide-react';
+import { generateRecipeSlug } from '@/utils/slug';
 
-export default function CatalogPage() {
+export default function ReceptyFilteredPage() {
     const router = useRouter();
+    const params = useParams();
+    const filters = (params.filters as string[]) || [];
+
     const [recipes, setRecipes] = useState<Recipe[]>([]);
     const [loading, setLoading] = useState(true);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-    const [filter, setFilter] = useState<FilterState>({
-        search: '',
-        strength: null,
-        flavorCategory: null,
-        mintCategory: null,
-        coolingCategory: null
-    });
+    // Parse filters from URL
+    const parseFiltersFromUrl = (): FilterState => {
+        const state: FilterState = {
+            search: '',
+            strength: null,
+            flavorCategory: null,
+            mintCategory: null,
+            coolingCategory: null
+        };
+
+        filters.forEach(slug => {
+            if (slug === 'all') return;
+
+            // Check each category
+            if (getStrengthBySlug(slug)) {
+                // Map strength slug to numeric value
+                if (slug === 'legkaya-krepost') state.strength = 3;
+                else if (slug === 'srednyaya-krepost') state.strength = 6;
+                else if (slug === 'krepkaya-krepost') state.strength = 9;
+            } else if (getFlavorBySlug(slug)) {
+                state.flavorCategory = slug;
+            } else if (getCoolingBySlug(slug)) {
+                state.coolingCategory = slug;
+            } else if (getMintBySlug(slug)) {
+                state.mintCategory = slug;
+            }
+        });
+
+        return state;
+    };
+
+    const [filter, setFilter] = useState<FilterState>(parseFiltersFromUrl());
+
+    // Update URL when filters change
+    useEffect(() => {
+        const buildFilterPath = (): string => {
+            const segments: string[] = [];
+
+            // Add strength
+            if (filter.strength !== null) {
+                if (filter.strength <= 3) segments.push('legkaya-krepost');
+                else if (filter.strength <= 6) segments.push('srednyaya-krepost');
+                else segments.push('krepkaya-krepost');
+            }
+
+            // Add flavor
+            if (filter.flavorCategory) segments.push(filter.flavorCategory);
+
+            // Add cooling
+            if (filter.coolingCategory) segments.push(filter.coolingCategory);
+
+            // Add mint
+            if (filter.mintCategory) segments.push(filter.mintCategory);
+
+            return segments.length > 0 ? `/recepty/${segments.join('/')}` : '/recepty';
+        };
+
+        const newPath = buildFilterPath();
+        const currentPath = `/recepty/${filters.join('/')}`;
+
+        if (newPath !== currentPath) {
+            router.push(newPath);
+        }
+    }, [filter, router, filters]);
 
     useEffect(() => {
         const loadCatalog = async () => {
@@ -56,21 +125,20 @@ export default function CatalogPage() {
     return (
         <div className="container mx-auto px-4 py-8">
             <SeoHead
-                title="Каталог кальянных миксов - Hookapedia"
+                title="Рецепты кальянных миксов - Хукапедия"
                 description="Подбор кальянных миксов по крепости, вкусу, наличию мяты и холодка. Огромная база рецептов."
             />
 
             <Breadcrumbs items={[
                 { label: 'Главная', path: '/' },
-                { label: 'Каталог', path: '/catalog' }
+                { label: 'Рецепты' }
             ]} />
 
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-8">Каталог Рецептов</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-8">Рецепты Миксов</h1>
 
             <div className="flex flex-col lg:flex-row gap-8">
                 {/* Sidebar Filters */}
                 <div className={`lg:w-1/4 space-y-6 ${isFilterOpen ? 'block' : 'hidden lg:block'}`}>
-
                     <div className="bg-surface border border-white/5 rounded-2xl p-6 shadow-lg lg:shadow-none">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="font-bold text-lg text-white flex items-center gap-2"><Filter size={18} /> Фильтры</h3>
@@ -94,7 +162,7 @@ export default function CatalogPage() {
                             </div>
                         </div>
 
-                        {/* Strength Slider (Single) */}
+                        {/* Strength Slider */}
                         <div className="mb-6">
                             <div className="flex justify-between items-center mb-2">
                                 <label className="text-xs text-muted uppercase font-bold block">Крепость</label>
@@ -148,8 +216,7 @@ export default function CatalogPage() {
                                     <button
                                         key={cat.id}
                                         onClick={() => setFilter({ ...filter, mintCategory: filter.mintCategory === cat.id ? null : cat.id })}
-                                        className={`px-3 py-2 rounded-lg text-xs font-medium border text-center flex-grow transition-colors ${filter.mintCategory === cat.id ? 'bg-primary border-primary text-white' : 'bg-white/5 border-white/5 text-muted hover:bg-white/10'
-                                            }`}
+                                        className={`px-3 py-2 rounded-lg text-xs font-medium border text-center flex-grow transition-colors cursor-pointer ${filter.mintCategory === cat.id ? 'bg-primary border-primary text-white' : 'bg-white/5 border-white/5 text-muted hover:bg-white/10'}`}
                                     >
                                         {cat.title}
                                     </button>
@@ -165,15 +232,13 @@ export default function CatalogPage() {
                                     <button
                                         key={cat.id}
                                         onClick={() => setFilter({ ...filter, coolingCategory: filter.coolingCategory === cat.id ? null : cat.id })}
-                                        className={`px-3 py-2 rounded-lg text-xs font-medium border text-center flex-grow transition-colors ${filter.coolingCategory === cat.id ? 'bg-blue-500/20 border-blue-500/50 text-blue-200' : 'bg-white/5 border-white/5 text-muted hover:bg-white/10'
-                                            }`}
+                                        className={`px-3 py-2 rounded-lg text-xs font-medium border text-center flex-grow transition-colors cursor-pointer ${filter.coolingCategory === cat.id ? 'bg-blue-500/20 border-blue-500/50 text-blue-200' : 'bg-white/5 border-white/5 text-muted hover:bg-white/10'}`}
                                     >
                                         {cat.title}
                                     </button>
                                 ))}
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -194,7 +259,7 @@ export default function CatalogPage() {
                     ) : recipes.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {recipes.map(recipe => (
-                                <RecipeCard key={recipe.id} recipe={recipe} onClick={() => router.push(`/recipe/${recipe.id}`)} />
+                                <RecipeCard key={recipe.id} recipe={recipe} onClick={() => router.push(`/recept/${generateRecipeSlug(recipe)}`)} />
                             ))}
                         </div>
                     ) : (

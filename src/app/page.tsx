@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { CollectionList, RecipeList } from '../components/RecipeComponents';
 import { SeoHead } from '../components/SeoHead';
 import { fetchRecipes, fetchCollections } from '../services/api';
 import { Recipe, Collection, PageRoute } from '../types';
-import { Loader2, ArrowRight } from 'lucide-react';
+import { ArrowRight, Flame, Loader2 } from 'lucide-react';
+import { generateRecipeSlug } from '@/utils/slug';
 
 export default function HomePage() {
     const router = useRouter();
@@ -36,7 +38,7 @@ export default function HomePage() {
     const schema = {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "Hookapedia",
+        "name": "Хукапедия",
         "url": "https://hookapedia.ru/",
         "potentialAction": {
             "@type": "SearchAction",
@@ -46,19 +48,19 @@ export default function HomePage() {
     };
 
     const handleViewAll = () => {
-        router.push('/catalog');
+        router.push('/recepty');
     };
 
     return (
         <>
             <SeoHead
-                title="Hookapedia - Энциклопедия кальянных вкусов и рецептов"
+                title="Хукапедия - Энциклопедия кальянных вкусов и рецептов"
                 description="Самая полная база миксов для кальяна. Подборки по вкусам, крепости и брендам. Советы по забивке от профессионалов."
                 schema={schema}
             />
 
             {/* Hidden H1 for SEO */}
-            <h1 className="sr-only">Hookapedia — Главная страница кальянных миксов</h1>
+            <h1 className="sr-only">Хукапедия — Главная страница кальянных миксов</h1>
 
             <section className="relative min-h-[500px] md:h-[550px] flex items-center justify-center overflow-hidden py-12 md:py-0">
                 <div className="absolute inset-0 z-0">
@@ -81,12 +83,12 @@ export default function HomePage() {
                         Тысячи проверенных рецептов, умный поиск по ингредиентам и профессиональные советы по забивке.
                     </p>
                     <div className="flex justify-center">
-                        <button
-                            onClick={() => router.push('/catalog')}
+                        <Link
+                            href="/recepty"
                             className="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-rose-700 text-white font-bold rounded-xl transition-all hover:scale-105 shadow-[0_0_20px_rgba(225,29,72,0.4)] flex items-center justify-center gap-2"
                         >
                             Найти рецепт <ArrowRight size={20} />
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -131,8 +133,8 @@ export default function HomePage() {
                         title="Свежие миксы"
                         subtitle="Новинки, добавленные нашими мастерами"
                         recipes={latestRecipes}
-                        onSelect={(recipe) => router.push(`/recipe/${recipe.id}`)}
-                        onViewAll={() => router.push('/catalog')}
+                        onSelect={(recipe) => router.push(`/recept/${generateRecipeSlug(recipe)}`)}
+                        onViewAll={() => router.push('/recepty')}
                     />
                 </>
             )}

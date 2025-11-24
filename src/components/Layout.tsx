@@ -201,7 +201,7 @@ export const Header: React.FC = () => {
 
   const navItems = [
     { label: 'Главная', path: '/', icon: <Flame size={18} /> },
-    { label: 'Каталог', path: '/catalog', icon: <BookOpen size={18} /> },
+    { label: 'Каталог', path: '/recepty', icon: <BookOpen size={18} /> },
   ];
 
   return (
@@ -226,9 +226,9 @@ export const Header: React.FC = () => {
             <Link
               key={item.path}
               href={item.path}
-              className={`flex items-center gap-2 text-sm font-medium transition-colors ${pathname === item.path
-                  ? 'text-primary'
-                  : 'text-muted hover:text-white'
+              className={`flex items-center gap-2 text-sm font-medium transition-colors ${item.path === '/recepty'
+                  ? (pathname.startsWith('/recepty') ? 'text-primary' : 'text-muted hover:text-white')
+                  : (pathname === item.path ? 'text-primary' : 'text-muted hover:text-white')
                 }`}
             >
               {item.icon}
@@ -257,8 +257,8 @@ export const Header: React.FC = () => {
                 href={item.path}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${pathname === item.path
-                    ? 'bg-primary/20 text-primary font-bold'
-                    : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                  ? 'bg-primary/20 text-primary font-bold'
+                  : 'text-gray-300 hover:bg-white/5 hover:text-white'
                   }`}
               >
                 {item.icon}
@@ -276,11 +276,11 @@ export const Footer: React.FC = () => (
   <footer className="border-t border-white/10 bg-surface py-8 mt-auto">
     <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-muted">
       <div className="text-center md:text-left">
-        <p className="font-semibold text-white mb-1">Hookapedia</p>
-        <p>&copy; 2024 Энциклопедия кальянных рецептов.</p>
+        <p className="font-semibold text-white mb-1">Хукапедия</p>
+        <p>&copy; 2025 Энциклопедия кальянных рецептов.</p>
       </div>
       <div className="flex gap-6">
-        <Link href="/catalog" className="hover:text-primary transition-colors">
+        <Link href="/recepty" className="hover:text-primary transition-colors">
           Карта сайта
         </Link>
         <a href="mailto:hello@hookapedia.ru" className="hover:text-primary transition-colors">

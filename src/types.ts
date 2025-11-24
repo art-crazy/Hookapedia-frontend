@@ -30,19 +30,20 @@ export interface Ingredient {
 
 export interface Recipe {
   id: string | number;
+  slug?: string; // URL-friendly transliterated slug
   title: string;
   description: string;
   imageUrl: string;
   ingredients: Ingredient[];
   strength: number; // 1-10
-  
+
   // New categorization fields
   strengthCategory?: string; // id from strengthCategories
   mintCategory?: string;     // id from mintCategories
   coolingCategory?: string;  // id from coolingCategories
   flavorCategory?: string;   // id from flavorCategoryCategories
-  
-  tags: string[]; 
+
+  tags: string[];
   author: string;
   createdAt: string;
   likes: number;
@@ -68,8 +69,7 @@ export interface FilterState {
 
 export enum PageRoute {
   HOME = 'home',
-  RECIPE = 'recipe',
-  CATALOG = 'catalog'
+  RECIPE = 'recipe'
 }
 
 export interface NavigationState {

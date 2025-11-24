@@ -8,12 +8,14 @@ import { Breadcrumbs } from '../../../components/Layout';
 import { fetchRecipeById, fetchSimilarRecipes } from '../../../services/api';
 import { getFlavorOptions } from '../../../services/categories';
 import { Recipe, PageRoute } from '../../../types';
+import { extractIdFromSlug, generateRecipeSlug } from '../../../utils/slug';
 import { Loader2 } from 'lucide-react';
 
 export default function RecipePage() {
     const router = useRouter();
     const params = useParams();
-    const recipeId = params.recipeId as string;
+    const slug = params.slug as string;
+    const recipeId = extractIdFromSlug(slug);
 
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [similarRecipes, setSimilarRecipes] = useState<Recipe[]>([]);
@@ -86,7 +88,7 @@ export default function RecipePage() {
 
             <Breadcrumbs items={[
                 { label: 'Главная', path: '/' },
-                { label: 'Каталог', path: '/catalog' },
+                { label: 'Рецепты', path: '/recepty' },
                 { label: recipe.title }
             ]} />
 
@@ -103,7 +105,7 @@ export default function RecipePage() {
                             <RecipeCard
                                 key={r.id}
                                 recipe={r}
-                                onClick={() => router.push(`/recipe/${r.id}`)}
+                                onClick={() => router.push(`/recept/${generateRecipeSlug(r)}`)}
                             />
                         ))}
                     </div>

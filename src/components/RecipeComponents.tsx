@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { generateRecipeSlug } from '@/utils/slug';
 import { Recipe, Ingredient, Collection, CollectionVariant } from '../types';
 import { Thermometer, Heart, User, Clock, Share2, PlusCircle, ListOrdered, Layers, ArrowRight, Check } from 'lucide-react';
 
@@ -13,8 +15,8 @@ export const StrengthIndicator: React.FC<{ level: number }> = ({ level }) => {
           <div
             key={i}
             className={`w-1 h-3 rounded-full ${i < level
-                ? level > 7 ? 'bg-red-500' : level > 4 ? 'bg-orange-400' : 'bg-green-500'
-                : 'bg-white/10'
+              ? level > 7 ? 'bg-red-500' : level > 4 ? 'bg-orange-400' : 'bg-green-500'
+              : 'bg-white/10'
               }`}
           />
         ))}
@@ -110,42 +112,42 @@ export const ViewAllCard: React.FC<{ onClick: () => void; variant: CollectionVar
 
   if (variant === 'featured') {
     return (
-      <div onClick={onClick} className={`${baseClasses} h-80 md:h-96 min-w-[280px] md:min-w-[450px] rounded-3xl`}>
+      <Link href="/recepty" className={`${baseClasses} h-80 md:h-96 min-w-[280px] md:min-w-[450px] rounded-3xl`}>
         <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform group-hover:bg-primary/20">
           <ArrowRight size={32} className="text-white group-hover:text-primary transition-colors" />
         </div>
         <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Весь каталог</h3>
         <p className="text-sm text-muted">Смотреть все коллекции</p>
-      </div>
+      </Link>
     );
   }
 
   if (variant === 'compact') {
     return (
-      <div onClick={onClick} className={`${baseClasses} h-32 md:h-40 min-w-[140px] md:min-w-[200px] rounded-2xl`}>
+      <Link href="/recepty" className={`${baseClasses} h-32 md:h-40 min-w-[140px] md:min-w-[200px] rounded-2xl`}>
         <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/5 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform group-hover:bg-primary/20">
           <ArrowRight size={16} className="text-white group-hover:text-primary transition-colors" />
         </div>
         <h3 className="text-xs md:text-sm font-bold text-white">Больше</h3>
-      </div>
+      </Link>
     );
   }
 
   // Standard
   return (
-    <div onClick={onClick} className={`${baseClasses} h-72 min-w-[220px] md:min-w-[300px] rounded-2xl`}>
+    <Link href="/recepty" className={`${baseClasses} h-72 min-w-[220px] md:min-w-[300px] rounded-2xl`}>
       <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform group-hover:bg-primary/20">
         <ArrowRight size={24} className="text-white group-hover:text-primary transition-colors" />
       </div>
       <h3 className="text-lg md:text-xl font-bold text-white mb-2">Больше</h3>
       <p className="text-xs md:text-sm text-muted">Перейти в каталог</p>
-    </div>
+    </Link>
   );
 };
 
 export const RecipeViewAllCard: React.FC<{ onClick: () => void }> = ({ onClick }) => (
-  <div
-    onClick={onClick}
+  <Link
+    href="/recepty"
     className="group h-full min-h-[420px] min-w-[280px] md:min-w-[340px] cursor-pointer bg-surface rounded-2xl border-2 border-dashed border-white/20 hover:border-primary/50 hover:bg-white/5 transition-all duration-300 flex flex-col items-center justify-center text-center p-6"
   >
     <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform group-hover:bg-primary/20">
@@ -153,7 +155,7 @@ export const RecipeViewAllCard: React.FC<{ onClick: () => void }> = ({ onClick }
     </div>
     <h3 className="text-xl font-bold text-white mb-2">Весь каталог</h3>
     <p className="text-sm text-muted">Смотреть тысячи других рецептов</p>
-  </div>
+  </Link>
 );
 
 export const CollectionList: React.FC<{
@@ -173,6 +175,11 @@ export const CollectionList: React.FC<{
           <h2 className="text-xl md:text-3xl font-bold text-white mb-1 md:mb-2">{title}</h2>
           {subtitle && <p className="text-xs md:text-base text-muted">{subtitle}</p>}
         </div>
+        {onViewAll && (
+          <Link href="/recepty" className="text-primary hover:text-white transition-colors text-xs md:text-sm font-medium whitespace-nowrap ml-4">
+            Смотреть все
+          </Link>
+        )}
       </div>
       <div className="modern-scroll pb-6 w-full">
         <div className="flex gap-4 md:gap-6 w-max">
@@ -208,9 +215,9 @@ export const RecipeList: React.FC<{
           {subtitle && <p className="text-xs md:text-base text-muted">{subtitle}</p>}
         </div>
         {onViewAll && (
-          <button onClick={onViewAll} className="text-primary hover:text-white transition-colors text-xs md:text-sm font-medium whitespace-nowrap ml-4">
+          <Link href="/recepty" className="text-primary hover:text-white transition-colors text-xs md:text-sm font-medium whitespace-nowrap ml-4">
             Смотреть все
-          </button>
+          </Link>
         )}
       </div>
 
@@ -232,13 +239,13 @@ export const RecipeList: React.FC<{
   );
 };
 
-export const RecipeCard: React.FC<{ recipe: Recipe; onClick: () => void }> = ({ recipe, onClick }) => {
+export const RecipeCard: React.FC<{ recipe: Recipe; onClick?: () => void }> = ({ recipe, onClick }) => {
   if (!recipe) return null;
 
   return (
-    <article
+    <Link
+      href={`/recept/${generateRecipeSlug(recipe)}`}
       className="group relative bg-surface rounded-2xl overflow-hidden border border-white/5 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(225,29,72,0.15)] cursor-pointer flex flex-col h-full"
-      onClick={onClick}
     >
       <div className="relative h-48 md:h-56 overflow-hidden">
         <img
@@ -284,7 +291,7 @@ export const RecipeCard: React.FC<{ recipe: Recipe; onClick: () => void }> = ({ 
           </div>
         </div>
       </div>
-    </article>
+    </Link>
   );
 };
 

@@ -28,7 +28,7 @@ export const SeoHead: React.FC<SeoProps> = ({
     updateMeta('og:description', description);
     updateMeta('og:image', image);
     updateMeta('og:type', type);
-    updateMeta('og:site_name', 'Hookapedia');
+    updateMeta('og:site_name', 'Хукапедия');
 
     // Twitter
     updateMeta('twitter:card', 'summary_large_image');

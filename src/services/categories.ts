@@ -1,80 +1,38 @@
+import { strengthCategories } from '@/data/categories/strengthCategories';
+import { flavorCategoryCategories } from '@/data/categories/flavorCategoryCategories';
+import { coolingCategories } from '@/data/categories/coolingCategories';
+import { mintCategories } from '@/data/categories/mintCategories';
+import { BaseCategory } from '@/data/categories/type';
 
-import { StrengthCategories, MintCategories, FlavorCategories, CoolingCategories } from '../types';
-
-// Крепость
-export const strengthCategories: StrengthCategories = {
-    'legkaya-krepost': {
-        id: 'legkaya-krepost',
-        title: 'Лёгкая крепость'
-    },
-    'srednyaya-krepost': {
-        id: 'srednyaya-krepost',
-        title: 'Средняя крепость'
-    },
-    'krepkaya-krepost': {
-        id: 'krepkaya-krepost',
-        title: 'Крепкая крепость'
-    }
+export const getStrengthOptions = (): BaseCategory[] => {
+    return Object.values(strengthCategories);
 };
 
-// Наличие мяты
-export const mintCategories: MintCategories = {
-    's-myatoy': {
-        id: 's-myatoy',
-        title: 'С мятой'
-    },
-    'bez-myaty': {
-        id: 'bez-myaty',
-        title: 'Без мяты'
-    }
+export const getFlavorOptions = (): BaseCategory[] => {
+    return Object.values(flavorCategoryCategories);
 };
 
-// Категории вкуса
-export const flavorCategoryCategories: FlavorCategories = {
-    'frukty': {
-        id: 'frukty',
-        title: 'Фруктовый'
-    },
-    'yagody': {
-        id: 'yagody',
-        title: 'Ягодный'
-    },
-    'tsitrusovye': {
-        id: 'tsitrusovye',
-        title: 'Цитрусовый'
-    },
-    'deserty': {
-        id: 'deserty',
-        title: 'Десертный'
-    },
-    'pryanosti-travy': {
-        id: 'pryanosti-travy',
-        title: 'Пряности и травы'
-    },
-    'ekzotika': {
-        id: 'ekzotika',
-        title: 'Экзотический'
-    }
+export const getCoolingOptions = (): BaseCategory[] => {
+    return Object.values(coolingCategories);
 };
 
-// Наличие холодка
-export const coolingCategories: CoolingCategories = {
-    'bez-kholoda': {
-        id: 'bez-kholoda',
-        title: 'Без холодка'
-    },
-    'legkiy-kholod': {
-        id: 'legkiy-kholod',
-        title: 'Лёгкий холодок'
-    },
-    'silnyy-kholod': {
-        id: 'silnyy-kholod',
-        title: 'Сильный холодок'
-    }
+export const getMintOptions = (): BaseCategory[] => {
+    return Object.values(mintCategories);
 };
 
-// Helpers for UI
-export const getStrengthOptions = () => Object.values(strengthCategories);
-export const getMintOptions = () => Object.values(mintCategories);
-export const getFlavorOptions = () => Object.values(flavorCategoryCategories);
-export const getCoolingOptions = () => Object.values(coolingCategories);
+// Helper to get category by slug
+export const getStrengthBySlug = (slug: string): BaseCategory | undefined => {
+    return strengthCategories[slug as keyof typeof strengthCategories];
+};
+
+export const getFlavorBySlug = (slug: string): BaseCategory | undefined => {
+    return flavorCategoryCategories[slug as keyof typeof flavorCategoryCategories];
+};
+
+export const getCoolingBySlug = (slug: string): BaseCategory | undefined => {
+    return coolingCategories[slug as keyof typeof coolingCategories];
+};
+
+export const getMintBySlug = (slug: string): BaseCategory | undefined => {
+    return mintCategories[slug as keyof typeof mintCategories];
+};
