@@ -5,7 +5,7 @@ const baseMetadata = buildMetadata({
     title: "Хукапедия — лучшие миксы табака и инструкции",
     description: "Соберите идеальный кальян: проверенные рецепты, пропорции, жаростойкость и советы по чашам.",
     url: "https://kalyany-mix.ru",
-    image: DEFAULT_OG_IMAGE,
+    ogImage: DEFAULT_OG_IMAGE,
     keywords: [
         'рецепты кальянов',
         'миксы табака',
