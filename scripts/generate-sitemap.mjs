@@ -6,7 +6,12 @@ import * as ts from 'typescript';
 
 const normalizeBaseUrl = (url) => url.replace(/\/+$/, '');
 
-const baseUrl = normalizeBaseUrl(process.env.SITE_URL ?? 'https://kalyany-mix.ru');
+// Import siteConfig dynamically to get the URL
+async function getBaseUrl() {
+  const { siteConfig } = await importTsModule('src/config/site.ts');
+  return normalizeBaseUrl(process.env.SITE_URL ?? siteConfig.url.current);
+}
+
 const apiUrl = process.env.API_URL ?? 'http://109.205.56.225:3001/api';
 const sitemapDir = join(process.cwd(), 'public', 'sitemaps');
 const MAX_URLS_PER_FILE = 15000;
@@ -59,7 +64,7 @@ try {
   console.error('❌ Ошибка при создании директории sitemap:', error);
 }
 
-const generateMainUrls = () => [
+const generateMainUrls = (baseUrl) => [
   baseUrl,
   `${baseUrl}/blog`,
   `${baseUrl}/faq`,
@@ -71,7 +76,7 @@ async function fetchRecipes() {
   return MOCK_RECIPES;
 }
 
-function generateRecipeUrls(recipes) {
+function generateRecipeUrls(recipes, baseUrl) {
   return recipes.map((recipe) => {
     const cleanedLink = recipe.link?.replace(/^\/+/, '');
 
@@ -89,7 +94,7 @@ function generateRecipeUrls(recipes) {
   });
 }
 
-async function generateFilterUrls() {
+async function generateFilterUrls(baseUrl) {
   const urls = new Set([`${baseUrl}/recepty`]);
 
   const { strength, flavor, cooling, mint } = await loadFilterCategories();
@@ -148,7 +153,7 @@ ${chunk
   return results;
 }
 
-function generateSitemapIndex(sitemaps) {
+function generateSitemapIndex(sitemaps, baseUrl) {
   const index = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemaps
@@ -166,18 +171,19 @@ ${sitemaps
 
 async function generateAllSitemaps() {
   try {
+    const baseUrl = await getBaseUrl();
     const allSitemaps = [];
 
-    allSitemaps.push(...generateSitemapFile(generateMainUrls(), 'sitemap-main.xml', '1.0'));
+    allSitemaps.push(...generateSitemapFile(generateMainUrls(baseUrl), 'sitemap-main.xml', '1.0'));
 
     const recipes = await fetchRecipes();
-    const recipeUrls = generateRecipeUrls(recipes);
+    const recipeUrls = generateRecipeUrls(recipes, baseUrl);
     allSitemaps.push(...generateSitemapFile(recipeUrls, 'sitemap-recipes.xml', '0.9'));
 
-    const filterUrls = await generateFilterUrls();
+    const filterUrls = await generateFilterUrls(baseUrl);
     allSitemaps.push(...generateSitemapFile(filterUrls, 'sitemap-categories.xml', '0.7'));
 
-    generateSitemapIndex(allSitemaps);
+    generateSitemapIndex(allSitemaps, baseUrl);
 
     console.log('\n📊 Статистика сгенерированных sitemap:');
     console.log('----------------------------------------');

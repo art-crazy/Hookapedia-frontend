@@ -13,6 +13,8 @@ interface BuildMetadataParams {
     type?: 'website' | 'article';
 }
 
+import { siteConfig } from '@/config/site';
+
 export function buildMetadata({
     title,
     description,
@@ -24,9 +26,31 @@ export function buildMetadata({
     type = 'website'
 }: BuildMetadataParams): Metadata {
     return {
+        metadataBase: new URL(siteConfig.url.current),
         title,
         description,
+        applicationName: 'Hookapedia',
+        authors: [{ name: 'Hookapedia Team', url: siteConfig.url.current }],
+        creator: 'Hookapedia',
+        publisher: 'Hookapedia',
+        formatDetection: {
+            telephone: false,
+            date: false,
+            address: false,
+            email: false,
+        },
         keywords: keywords.join(', '),
+        robots: {
+            index: true,
+            follow: true,
+            googleBot: {
+                index: true,
+                follow: true,
+                'max-video-preview': -1,
+                'max-image-preview': 'large',
+                'max-snippet': -1,
+            },
+        },
         alternates: {
             canonical: url
         },
@@ -50,7 +74,8 @@ export function buildMetadata({
             card: 'summary_large_image',
             title: ogTitle || title,
             description: ogDescription || description,
-            images: [ogImage]
+            images: [ogImage],
+            creator: '@hookapedia' // Placeholder, update if real handle exists
         }
     };
 }
