@@ -294,17 +294,11 @@ export const Footer: React.FC = () => (
 export const Breadcrumbs: React.FC<{
   items: { label: string; path?: string }[];
 }> = ({ items }) => {
-  // Generate JSON-LD for Breadcrumbs
-  const schemaData = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": items.map((item, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "name": item.label,
-      "item": item.path ? `https://hookapedia.ru${item.path.startsWith('/') ? item.path : '/' + item.path}` : undefined
-    }))
-  };
+  const { siteConfig } = require('@/config/site');
+  const { generateBreadcrumbSchema } = require('@/utils/schema');
+
+  // Generate JSON-LD for Breadcrumbs using utility
+  const schemaData = generateBreadcrumbSchema(items, siteConfig.url.current);
 
   return (
     <>
