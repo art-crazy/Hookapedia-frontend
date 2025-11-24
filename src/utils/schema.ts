@@ -72,7 +72,7 @@ export function generateRecipeSchema(recipe: any, baseUrl: string) {
 /**
  * Generate BreadcrumbList schema
  */
-export function generateBreadcrumbSchema(items: { label: string; path?: string }[], baseUrl: string) {
+    export function generateBreadcrumbSchema(items: { label: string; path?: string }[], baseUrl: string) {
     return {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
@@ -88,7 +88,7 @@ export function generateBreadcrumbSchema(items: { label: string; path?: string }
 /**
  * Generate ItemList schema for recipe collections
  */
-export function generateItemListSchema(
+    export function generateItemListSchema(
     recipes: any[],
     title: string,
     description: string,
