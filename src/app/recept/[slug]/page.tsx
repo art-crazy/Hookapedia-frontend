@@ -2,14 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { RecipeCard, RecipeDetailView } from '../../../components/RecipeComponents';
-import { SeoHead } from '../../../components/SeoHead';
-import { Breadcrumbs } from '../../../components/Layout';
-import { fetchRecipeById, fetchSimilarRecipes } from '../../../services/api';
-import { getFlavorOptions } from '../../../services/categories';
-import { Recipe, PageRoute } from '../../../types';
-import { extractIdFromSlug, generateRecipeSlug } from '../../../utils/slug';
+import { RecipeCard, RecipeDetailView } from '@/components/RecipeComponents.tsx';
+import { SeoHead } from '@/components/SeoHead.tsx';
+import { Breadcrumbs } from '@/components/Layout.tsx';
+import { fetchRecipeById, fetchSimilarRecipes } from '@/services/api.ts';
+import { Recipe } from '@/types.ts';
+import { extractIdFromSlug, generateRecipeSlug } from '@/utils/slug.ts';
 import { Loader2 } from 'lucide-react';
+import { generateRecipeSchema } from '@/utils/schema';
+import { siteConfig } from '@/config/site';
 
 export default function RecipePage() {
     const router = useRouter();
@@ -55,26 +56,7 @@ export default function RecipePage() {
     if (!recipe) return <div className="p-20 text-center text-white">Рецепт не найден</div>;
 
     // Structured Data for Recipe (Google/Yandex Snippet)
-    const recipeSchema = {
-        "@context": "https://schema.org/",
-        "@type": "Recipe",
-        "name": recipe.title,
-        "image": [recipe.imageUrl],
-        "author": {
-            "@type": "Person",
-            "name": recipe.author
-        },
-        "datePublished": recipe.createdAt,
-        "description": recipe.description,
-        "recipeCategory": recipe.flavorCategory ? getFlavorOptions().find(f => f.id === recipe.flavorCategory)?.title : "Mix",
-        "recipeIngredient": recipe.ingredients.map(i => `${i.percentage}% ${i.name} (${i.brand})`),
-        "recipeInstructions": recipe.steps?.map((step, index) => ({
-            "@type": "HowToStep",
-            "name": step.title,
-            "text": step.text,
-            "position": index + 1
-        }))
-    };
+    const recipeSchema = generateRecipeSchema(recipe, siteConfig.url.current);
 
     return (
         <div className="container mx-auto px-4 py-8">

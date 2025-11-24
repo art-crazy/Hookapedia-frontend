@@ -6,9 +6,11 @@ import Link from 'next/link';
 import { CollectionList, RecipeList } from '../components/RecipeComponents';
 import { SeoHead } from '../components/SeoHead';
 import { fetchRecipes, fetchCollections } from '../services/api';
-import { Recipe, Collection, PageRoute } from '../types';
-import { ArrowRight, Flame, Loader2 } from 'lucide-react';
+import { Recipe, Collection } from '../types';
+import { ArrowRight, Loader2 } from 'lucide-react';
 import { generateRecipeSlug } from '@/utils/slug';
+import { generateOrganizationSchema, generateWebSiteSchema } from '@/utils/schema';
+import { siteConfig } from '@/config/site';
 
 export default function HomePage() {
     const router = useRouter();
@@ -34,18 +36,9 @@ export default function HomePage() {
         loadData();
     }, []);
 
-    // Website Schema
-    const schema = {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Хукапедия",
-        "url": "https://hookapedia.ru/",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://hookapedia.ru/search?q={search_term_string}",
-            "query-input": "required name=search_term_string"
-        }
-    };
+    // Website and Organization Schemas
+    const websiteSchema = generateWebSiteSchema(siteConfig.url.current, siteConfig.metadata.name);
+    const organizationSchema = generateOrganizationSchema(siteConfig.url.current, siteConfig.metadata.name);
 
     const handleViewAll = () => {
         router.push('/recepty');
@@ -56,7 +49,13 @@ export default function HomePage() {
             <SeoHead
                 title="Хукапедия - Энциклопедия кальянных вкусов и рецептов"
                 description="Самая полная база миксов для кальяна. Подборки по вкусам, крепости и брендам. Советы по забивке от профессионалов."
-                schema={schema}
+                schema={websiteSchema}
+            />
+
+            {/* Organization Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
             />
 
             {/* Hidden H1 for SEO */}
