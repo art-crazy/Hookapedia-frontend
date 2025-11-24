@@ -2,37 +2,41 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { CollectionList, RecipeList } from '../components/RecipeComponents';
 import { SeoHead } from '../components/SeoHead';
 import { fetchRecipes, fetchCollections } from '../services/api';
 import { Recipe, Collection } from '../types';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { generateRecipeSlug } from '@/utils/slug';
 import { generateOrganizationSchema, generateWebSiteSchema } from '@/utils/schema';
 import { siteConfig } from '@/config/site';
+import { HeroSection } from '@/components/home/HeroSection';
 
 export default function HomePage() {
     const router = useRouter();
-    const [latestRecipes, setLatestRecipes] = useState<Recipe[]>([]);
-    const [collections, setCollections] = useState<{ popular: Collection[], flavors: Collection[], mood: Collection[] } | null>(null);
+    const [featuredCollections, setFeaturedCollections] = useState<Collection[]>([]);
+    const [flavorCollections, setFlavorCollections] = useState<Collection[]>([]);
+    const [popularCollections, setPopularCollections] = useState<Collection[]>([]);
+    const [freshRecipes, setFreshRecipes] = useState<Recipe[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadData = async () => {
-            setLoading(true);
             try {
-                // Fetch 7 recipes to fill 2 rows (4 cols) with the "View All" card
-                const { recipes } = await fetchRecipes(1, 7);
-                setLatestRecipes(recipes);
-                const cols = await fetchCollections();
-                setCollections(cols);
+                const collectionsData = await fetchCollections();
+                const recipesData = await fetchRecipes(1, 6);
+
+                setFeaturedCollections(collectionsData.mood);
+                setFlavorCollections(collectionsData.flavors);
+                setPopularCollections(collectionsData.popular);
+                setFreshRecipes(recipesData.recipes);
             } catch (err) {
                 console.error(err);
             } finally {
                 setLoading(false);
             }
         };
+
         loadData();
     }, []);
 
@@ -61,49 +65,28 @@ export default function HomePage() {
             {/* Hidden H1 for SEO */}
             <h1 className="sr-only">Хукапедия — Главная страница кальянных миксов</h1>
 
-            <section className="relative min-h-[500px] md:h-[550px] flex items-center justify-center overflow-hidden py-12 md:py-0">
-                <div className="absolute inset-0 z-0">
-                    <img
-                        src="https://images.unsplash.com/photo-1527661591475-527312dd65f5?q=80&w=2000&auto=format&fit=crop"
-                        alt="Hookah Smoke Background"
-                        className="w-full h-full object-cover opacity-50"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/80 to-background" />
-                </div>
+            <HeroSection
+                badge="#1 База знаний о кальянах"
+                title="Искусство Вкуса"
+                highlightedWord="Вкуса"
+                subtitle="Тысячи проверенных рецептов, умный поиск по ингредиентам и профессиональные советы по забивке."
+                ctaText="Найти рецепт"
+                ctaLink="/recepty"
+                backgroundImage="https://images.unsplash.com/photo-1527661591475-527312dd65f5?q=80&w=2000&auto=format&fit=crop"
+            />
 
-                <div className="relative z-10 container mx-auto px-4 text-center">
-                    <div className="inline-block py-1 px-3 rounded-full bg-primary/20 text-primary border border-primary/20 text-sm font-semibold mb-6 animate-pulse">
-                        #1 База знаний о кальянах
-                    </div>
-                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight drop-shadow-2xl">
-                        Искусство <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500">Вкуса</span>
-                    </h2>
-                    <p className="text-lg md:text-2xl text-muted max-w-2xl mx-auto mb-10 leading-relaxed px-2">
-                        Тысячи проверенных рецептов, умный поиск по ингредиентам и профессиональные советы по забивке.
-                    </p>
-                    <div className="flex justify-center">
-                        <Link
-                            href="/recepty"
-                            className="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-rose-700 text-white font-bold rounded-xl transition-all hover:scale-105 shadow-[0_0_20px_rgba(225,29,72,0.4)] flex items-center justify-center gap-2"
-                        >
-                            Найти рецепт <ArrowRight size={20} />
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
-            {loading || !collections ? (
+            {loading ? (
                 <div className="flex justify-center items-center py-20">
                     <Loader2 className="animate-spin text-primary" size={40} />
                 </div>
             ) : (
                 <>
-                    {/* List 1: Standard Cards - Popular */}
+                    {/* List 1: Featured/Large Cards - Mood */}
                     <CollectionList
-                        title="Популярные подборки"
-                        subtitle="Выбор нашего сообщества на этой неделе"
-                        collections={collections.popular}
-                        variant="standard"
+                        title="Под настроение"
+                        subtitle="Атмосферные коллекции для особых случаев"
+                        collections={featuredCollections}
+                        variant="featured"
                         onSelect={(c) => console.log('Selected', c.name)}
                         onViewAll={handleViewAll}
                     />
@@ -112,18 +95,18 @@ export default function HomePage() {
                     <CollectionList
                         title="Вкусовая палитра"
                         subtitle="Найдите идеальный вкус для вашего микса"
-                        collections={collections.flavors}
+                        collections={flavorCollections}
                         variant="compact"
                         onSelect={(c) => console.log('Selected', c.name)}
                         onViewAll={handleViewAll}
                     />
 
-                    {/* List 3: Featured/Large Cards - Mood */}
+                    {/* List 3: Standard Cards - Popular */}
                     <CollectionList
-                        title="Под настроение"
-                        subtitle="Атмосферные коллекции для особых случаев"
-                        collections={collections.mood}
-                        variant="featured"
+                        title="Популярные подборки"
+                        subtitle="Выбор нашего сообщества на этой неделе"
+                        collections={popularCollections}
+                        variant="standard"
                         onSelect={(c) => console.log('Selected', c.name)}
                         onViewAll={handleViewAll}
                     />
@@ -131,7 +114,7 @@ export default function HomePage() {
                     <RecipeList
                         title="Свежие миксы"
                         subtitle="Новинки, добавленные нашими мастерами"
-                        recipes={latestRecipes}
+                        recipes={freshRecipes}
                         onSelect={(recipe) => router.push(`/recept/${generateRecipeSlug(recipe)}`)}
                         onViewAll={() => router.push('/recepty')}
                     />

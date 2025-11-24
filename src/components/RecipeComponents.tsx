@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { generateRecipeSlug } from '@/utils/slug';
 import { Recipe, Ingredient, Collection, CollectionVariant } from '../types';
 import { Thermometer, Heart, User, Clock, Share2, PlusCircle, ListOrdered, Layers, ArrowRight, Check } from 'lucide-react';
+import { SectionHeader } from './ui/SectionHeader';
 
 export const StrengthIndicator: React.FC<{ level: number }> = ({ level }) => {
   return (
@@ -170,17 +171,11 @@ export const CollectionList: React.FC<{
 
   return (
     <section className="py-8 md:py-10 container mx-auto px-4">
-      <div className="flex justify-between items-end mb-4 md:mb-6">
-        <div>
-          <h2 className="text-xl md:text-3xl font-bold text-white mb-1 md:mb-2">{title}</h2>
-          {subtitle && <p className="text-xs md:text-base text-muted">{subtitle}</p>}
-        </div>
-        {onViewAll && (
-          <Link href="/recepty" className="text-primary hover:text-white transition-colors text-xs md:text-sm font-medium whitespace-nowrap ml-4">
-            Смотреть все
-          </Link>
-        )}
-      </div>
+      <SectionHeader
+        title={title}
+        subtitle={subtitle}
+        showViewAll={!!onViewAll}
+      />
       <div className="modern-scroll pb-6 w-full">
         <div className="flex gap-4 md:gap-6 w-max">
           {collections.map(col => (
@@ -209,17 +204,11 @@ export const RecipeList: React.FC<{
 
   return (
     <section className="py-8 md:py-12 container mx-auto px-4">
-      <div className="flex justify-between items-end mb-4 md:mb-6">
-        <div>
-          <h2 className="text-xl md:text-3xl font-bold text-white mb-1 md:mb-2">{title}</h2>
-          {subtitle && <p className="text-xs md:text-base text-muted">{subtitle}</p>}
-        </div>
-        {onViewAll && (
-          <Link href="/recepty" className="text-primary hover:text-white transition-colors text-xs md:text-sm font-medium whitespace-nowrap ml-4">
-            Смотреть все
-          </Link>
-        )}
-      </div>
+      <SectionHeader
+        title={title}
+        subtitle={subtitle}
+        showViewAll={!!onViewAll}
+      />
 
       <div className="modern-scroll pb-6 w-full">
         <div className="flex gap-4 md:gap-6 w-max">

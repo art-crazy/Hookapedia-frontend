@@ -8,9 +8,9 @@ import { Breadcrumbs } from '@/components/Layout.tsx';
 import { fetchRecipeById, fetchSimilarRecipes } from '@/services/api.ts';
 import { Recipe } from '@/types.ts';
 import { extractIdFromSlug, generateRecipeSlug } from '@/utils/slug.ts';
-import { Loader2 } from 'lucide-react';
 import { generateRecipeSchema } from '@/utils/schema';
 import { siteConfig } from '@/config/site';
+import { LoadingState, NotFoundState } from '@/components/ui/States';
 
 export default function RecipePage() {
     const router = useRouter();
@@ -46,14 +46,10 @@ export default function RecipePage() {
     }, [recipeId]);
 
     if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <Loader2 className="animate-spin text-primary" size={40} />
-            </div>
-        );
+        return <LoadingState fullScreen />;
     }
 
-    if (!recipe) return <div className="p-20 text-center text-white">Рецепт не найден</div>;
+    if (!recipe) return <NotFoundState message="Рецепт не найден" />;
 
     // Structured Data for Recipe (Google/Yandex Snippet)
     const recipeSchema = generateRecipeSchema(recipe, siteConfig.url.current);
