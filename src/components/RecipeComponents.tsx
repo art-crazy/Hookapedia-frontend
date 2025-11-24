@@ -46,11 +46,17 @@ export const CollectionCard: React.FC<{
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/80 backdrop-blur-md mb-4">
+
+        {/* Badge at top */}
+        <div className="absolute top-4 left-4 md:top-6 md:left-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/80 backdrop-blur-md">
             <Layers size={14} className="text-white" />
             <span className="text-xs font-bold text-white uppercase tracking-wider">Подборка</span>
           </div>
+        </div>
+
+        {/* Content at bottom */}
+        <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full">
           <h3 className="text-2xl md:text-4xl font-bold text-white mb-2 md:mb-3 leading-tight">{collection.name}</h3>
           <p className="text-sm md:text-base text-gray-200 line-clamp-2 max-w-md">{collection.description}</p>
         </div>
