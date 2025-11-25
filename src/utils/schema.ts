@@ -72,7 +72,7 @@ export function generateRecipeSchema(recipe: any, baseUrl: string) {
 /**
  * Generate BreadcrumbList schema
  */
-    export function generateBreadcrumbSchema(items: { label: string; path?: string }[], baseUrl: string) {
+export function generateBreadcrumbSchema(items: { label: string; path?: string }[], baseUrl: string) {
     return {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
@@ -88,7 +88,7 @@ export function generateRecipeSchema(recipe: any, baseUrl: string) {
 /**
  * Generate ItemList schema for recipe collections
  */
-    export function generateItemListSchema(
+export function generateItemListSchema(
     recipes: any[],
     title: string,
     description: string,
@@ -105,6 +105,24 @@ export function generateRecipeSchema(recipe: any, baseUrl: string) {
             position: index + 1,
             url: `${baseUrl}/recept/${recipe.slug || recipe.id}`,
             name: recipe.title
+        }))
+    };
+}
+
+/**
+ * Generate DefinedTermSet schema for glossary
+ */
+export function generateDefinedTermSetSchema(terms: { term: string; definition: string }[], baseUrl: string) {
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'DefinedTermSet',
+        name: 'Глоссарий кальянных терминов',
+        description: 'Словарь терминов и определений кальянной индустрии',
+        hasDefinedTerm: terms.map(item => ({
+            '@type': 'DefinedTerm',
+            name: item.term,
+            description: item.definition,
+            inDefinedTermSet: `${baseUrl}/glossarij`
         }))
     };
 }

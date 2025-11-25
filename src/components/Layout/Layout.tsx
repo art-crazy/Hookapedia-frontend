@@ -280,6 +280,9 @@ export const Footer: React.FC = () => (
         <p>&copy; 2025 Энциклопедия кальянных рецептов.</p>
       </div>
       <div className="flex gap-6">
+        <Link href="/glossarij" className="hover:text-primary transition-colors">
+          Глоссарий
+        </Link>
         <Link href="/recepty" className="hover:text-primary transition-colors">
           Карта сайта
         </Link>
