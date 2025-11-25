@@ -73,7 +73,7 @@ export function AgeGate({ children }: AgeGateProps) {
                             <div className="flex flex-col sm:flex-row gap-4 w-full">
                                 <button
                                     onClick={handleConfirm}
-                                    className="flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold hover:shadow-[0_0_20px_rgba(225,29,72,0.4)] transition-all active:scale-[0.98]"
+                                    className="cursor-pointer flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold hover:shadow-[0_0_20px_rgba(225,29,72,0.4)] transition-all active:scale-[0.98]"
                                 >
                                     <Check size={20} />
                                     Мне есть 18
@@ -81,7 +81,7 @@ export function AgeGate({ children }: AgeGateProps) {
 
                                 <button
                                     onClick={handleReject}
-                                    className="flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-surface-light border border-white/10 text-muted hover:text-white hover:bg-white/5 transition-colors active:scale-[0.98]"
+                                    className="cursor-pointer flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-surface-light border border-white/10 text-muted hover:text-white hover:bg-white/5 transition-colors active:scale-[0.98]"
                                 >
                                     <X size={20} />
                                     Мне нет 18
