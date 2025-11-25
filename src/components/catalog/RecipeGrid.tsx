@@ -16,14 +16,14 @@ interface RecipeGridProps {
     onToggleFilter?: () => void;
 }
 
-export const RecipeGrid: React.FC<RecipeGridProps> = ({
+export function RecipeGrid({
     recipes,
     loading,
     onReset,
     showMobileFilterToggle = false,
     isFilterOpen = false,
     onToggleFilter
-}) => {
+}: RecipeGridProps) {
     const router = useRouter();
 
     return (
@@ -68,4 +68,4 @@ export const RecipeGrid: React.FC<RecipeGridProps> = ({
             )}
         </div>
     );
-};
+}

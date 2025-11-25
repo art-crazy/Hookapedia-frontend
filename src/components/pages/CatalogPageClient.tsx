@@ -12,7 +12,7 @@ interface CatalogPageClientProps {
     initialFilter?: FilterState;
 }
 
-export default function CatalogPageClient({ initialRecipes, initialFilter }: CatalogPageClientProps) {
+export function CatalogPageClient({ initialRecipes, initialFilter }: CatalogPageClientProps) {
     const router = useRouter();
     const [recipes, setRecipes] = useState<Recipe[]>(initialRecipes);
     const [loading, setLoading] = useState(false);

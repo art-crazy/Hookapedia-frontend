@@ -14,7 +14,7 @@ interface HeroSectionProps {
     backgroundImage: string;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({
+export function HeroSection({
     badge,
     title,
     highlightedWord,
@@ -22,7 +22,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     ctaText,
     ctaLink,
     backgroundImage
-}) => {
+}: HeroSectionProps) {
     const renderTitle = () => {
         if (!highlightedWord) return title;
 
@@ -72,4 +72,4 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
         </section>
     );
-};
+}

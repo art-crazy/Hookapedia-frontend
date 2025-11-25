@@ -7,7 +7,7 @@ import { fetchRecipeById, fetchSimilarRecipes } from '@/services/api';
 import { extractIdFromSlug } from '@/utils/slug';
 import { generateRecipeSchema } from '@/utils/schema';
 import { siteConfig } from '@/config/site';
-import RecipePageClient from '@/components/pages/RecipePageClient';
+import { RecipePageClient } from '@/components/pages/RecipePageClient';
 
 interface RecipePageProps {
     params: {

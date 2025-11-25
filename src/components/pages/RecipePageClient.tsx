@@ -10,7 +10,7 @@ interface RecipePageClientProps {
     similarRecipes: Recipe[];
 }
 
-export default function RecipePageClient({ similarRecipes }: RecipePageClientProps) {
+export function RecipePageClient({ similarRecipes }: RecipePageClientProps) {
     const router = useRouter();
 
     return (

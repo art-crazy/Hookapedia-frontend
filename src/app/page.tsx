@@ -3,7 +3,7 @@ import { SeoHead } from '@/components/SeoHead';
 import { fetchRecipes, fetchCollections } from '@/services/api';
 import { generateOrganizationSchema, generateWebSiteSchema, generateBreadcrumbSchema, generateItemListSchema } from '@/utils/schema';
 import { siteConfig } from '@/config/site';
-import HomePageClient from '@/components/pages/HomePageClient';
+import { HomePageClient } from '@/components/pages/HomePageClient';
 
 export default async function HomePage() {
     // Server‑side data fetching

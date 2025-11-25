@@ -10,12 +10,12 @@ interface SectionHeaderProps {
     viewAllLink?: string;
 }
 
-export const SectionHeader: React.FC<SectionHeaderProps> = ({
+export function SectionHeader({
     title,
     subtitle,
     showViewAll = false,
     viewAllLink = '/recepty'
-}) => {
+}: SectionHeaderProps) {
     return (
         <div className="flex justify-between items-end mb-4 md:mb-6">
             <div>
@@ -29,4 +29,4 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
             )}
         </div>
     );
-};
+}

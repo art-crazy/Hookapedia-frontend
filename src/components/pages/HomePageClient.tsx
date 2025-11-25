@@ -14,7 +14,7 @@ interface HomePageClientProps {
     freshRecipes: Recipe[];
 }
 
-export default function HomePageClient({
+export function HomePageClient({
     featuredCollections,
     flavorCollections,
     popularCollections,

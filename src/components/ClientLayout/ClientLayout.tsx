@@ -1,16 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Header, Footer, MouseSpotlight } from './Layout';
+import { Header, Footer, MouseSpotlight } from '@/components/Layout';
 import { usePathname, useRouter } from 'next/navigation';
 
-export default function ClientLayout({ children }: { children: React.ReactNode }) {
-    const pathname = usePathname();
+export function ClientLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
-
-    const navigate = (path: string) => {
-        router.push(path);
-    };
 
     return (
         <div className="min-h-screen flex flex-col bg-background text-text font-sans selection:bg-primary selection:text-white">

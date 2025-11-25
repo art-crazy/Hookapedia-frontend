@@ -8,7 +8,7 @@ interface LoadingStateProps {
     fullScreen?: boolean;
 }
 
-export const LoadingState: React.FC<LoadingStateProps> = ({ size = 40, fullScreen = false }) => {
+export function LoadingState({ size = 40, fullScreen = false }: LoadingStateProps) {
     const containerClass = fullScreen
         ? "flex justify-center items-center h-screen"
         : "flex justify-center py-20";
@@ -18,7 +18,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({ size = 40, fullScree
             <Loader2 className="animate-spin text-primary" size={size} />
         </div>
     );
-};
+}
 
 interface EmptyStateProps {
     icon: LucideIcon;

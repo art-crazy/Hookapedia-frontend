@@ -99,4 +99,4 @@ export function AgeGate({ children }: AgeGateProps) {
     );
 }
 
-export default AgeGate;
+

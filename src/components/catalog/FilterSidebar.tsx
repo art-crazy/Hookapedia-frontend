@@ -13,13 +13,13 @@ interface FilterSidebarProps {
     onReset: () => void;
 }
 
-export const FilterSidebar: React.FC<FilterSidebarProps> = ({
+export function FilterSidebar({
     filter,
     setFilter,
     isOpen,
     hasActiveFilters,
     onReset
-}) => {
+}: FilterSidebarProps) {
     return (
         <div className={`lg:w-1/4 space-y-6 ${isOpen ? 'block' : 'hidden lg:block'}`}>
             <div className="bg-surface border border-white/5 rounded-2xl p-6 shadow-lg lg:shadow-none">
@@ -106,8 +106,8 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                                 key={cat.id}
                                 onClick={() => setFilter({ ...filter, mintCategory: filter.mintCategory === cat.id ? null : cat.id })}
                                 className={`px-3 py-2 rounded-lg text-xs font-medium border text-center flex-grow transition-colors cursor-pointer ${filter.mintCategory === cat.id
-                                        ? 'bg-primary border-primary text-white'
-                                        : 'bg-white/5 border-white/5 text-muted hover:bg-white/10'
+                                    ? 'bg-primary border-primary text-white'
+                                    : 'bg-white/5 border-white/5 text-muted hover:bg-white/10'
                                     }`}
                             >
                                 {cat.title}
@@ -125,8 +125,8 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                                 key={cat.id}
                                 onClick={() => setFilter({ ...filter, coolingCategory: filter.coolingCategory === cat.id ? null : cat.id })}
                                 className={`px-3 py-2 rounded-lg text-xs font-medium border text-center flex-grow transition-colors cursor-pointer ${filter.coolingCategory === cat.id
-                                        ? 'bg-blue-500/20 border-blue-500/50 text-blue-200'
-                                        : 'bg-white/5 border-white/5 text-muted hover:bg-white/10'
+                                    ? 'bg-blue-500/20 border-blue-500/50 text-blue-200'
+                                    : 'bg-white/5 border-white/5 text-muted hover:bg-white/10'
                                     }`}
                             >
                                 {cat.title}
@@ -137,4 +137,4 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
             </div>
         </div>
     );
-};
+}

@@ -4,7 +4,7 @@ import { Breadcrumbs } from '@/components/Layout';
 import { fetchRecipes } from '@/services/api';
 import { generateItemListSchema } from '@/utils/schema';
 import { siteConfig } from '@/config/site';
-import CatalogPageClient from '@/components/pages/CatalogPageClient';
+import { CatalogPageClient } from '@/components/pages/CatalogPageClient';
 
 export default async function ReceptyPage() {
     // Server-side initial data fetch

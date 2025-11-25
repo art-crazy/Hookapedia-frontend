@@ -4,7 +4,7 @@ import Script from 'next/script';
 import React from 'react';
 import { YM_ENABLED, YM_ID } from '@/config/ym.constants';
 
-export default function YandexMetrika() {
+export function YandexMetrika() {
     if (!YM_ENABLED) {
         return null;
     }

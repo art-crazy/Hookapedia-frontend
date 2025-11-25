@@ -9,7 +9,7 @@ import {
     getMintBySlug
 } from '@/services/categories';
 import { FilterState } from '@/types';
-import CatalogPageClient from '@/components/pages/CatalogPageClient';
+import { CatalogPageClient } from '@/components/pages/CatalogPageClient';
 
 interface ReceptyFilteredPageProps {
     params: {
