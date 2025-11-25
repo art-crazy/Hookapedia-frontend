@@ -1,17 +1,26 @@
 import { Enemy, Particle } from './types';
-import { CANVAS_WIDTH } from './constants';
 
 // Initialize enemy formation
-export const initEnemies = (level: number = 1): Enemy[] => {
+export const initEnemies = (level: number = 1, canvasWidth: number = 800): Enemy[] => {
   const enemies: Enemy[] = [];
 
-  // На первом уровне меньше врагов для лёгкого старта
-  const rows = level === 1 ? 3 : 5;
-  const cols = level === 1 ? 8 : 10;
+  // Адаптивное количество врагов в зависимости от размера экрана
+  const isMobile = canvasWidth < 500;
 
-  const spacing = 60;
-  const startX = (CANVAS_WIDTH - cols * spacing) / 2;
-  const startY = 80;
+  // На мобильных меньше врагов, на первом уровне ещё меньше
+  let rows: number, cols: number;
+  if (isMobile) {
+    rows = level === 1 ? 2 : 3;
+    cols = level === 1 ? 5 : 6;
+  } else {
+    rows = level === 1 ? 3 : 5;
+    cols = level === 1 ? 8 : 10;
+  }
+
+  // Адаптивное расстояние между врагами
+  const spacing = Math.min(60, (canvasWidth - 40) / cols);
+  const startX = (canvasWidth - cols * spacing) / 2;
+  const startY = isMobile ? 50 : 80;
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {

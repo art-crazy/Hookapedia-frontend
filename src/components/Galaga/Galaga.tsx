@@ -50,15 +50,16 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
     const updateSize = () => {
       const isMobile = window.innerWidth < 768;
       const newSize = {
-        width: isMobile ? Math.min(window.innerWidth - 32, 400) : 800,
-        height: isMobile ? Math.min(window.innerHeight - 200, 500) : 600,
+        width: isMobile ? Math.min(window.innerWidth - 40, 380) : 800,
+        height: isMobile ? Math.min(window.innerHeight - 280, 480) : 600,
       };
       setCanvasSize(newSize);
       playerRef.current = { x: newSize.width / 2, y: newSize.height - 50 };
+      return newSize;
     };
 
-    updateSize();
-    enemiesRef.current = initEnemies(1);
+    const initialSize = updateSize();
+    enemiesRef.current = initEnemies(1, initialSize.width);
 
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
@@ -283,7 +284,7 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
     if (enemiesRef.current.length === 0) {
       setLevel((l) => {
         const newLevel = l + 1;
-        enemiesRef.current = initEnemies(newLevel);
+        enemiesRef.current = initEnemies(newLevel, canvasSize.width);
         return newLevel;
       });
     }
@@ -362,31 +363,31 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
     particlesRef.current = [];
     powerUpsRef.current = [];
     gameTimeRef.current = 0;
-    enemiesRef.current = initEnemies(1);
+    enemiesRef.current = initEnemies(1, canvasSize.width);
     playerRef.current = { x: canvasSize.width / 2, y: canvasSize.height - 50 };
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4">
-      <div className="relative flex flex-col items-center gap-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-2 md:p-4">
+      <div className="relative flex flex-col items-center gap-2 md:gap-4 w-full max-w-[900px]">
         {/* Game info and close button row */}
-        <div className="w-full flex items-center justify-between">
-          <div className="flex gap-2 md:gap-8 text-white font-mono text-sm md:text-lg flex-wrap">
+        <div className="w-full flex items-center justify-between px-1 md:px-0">
+          <div className="flex gap-2 md:gap-6 text-white font-mono text-xs md:text-lg flex-wrap">
             <div>Очки: <span className="text-primary font-bold">{score}</span></div>
             <div>Жизни: <span className="text-green-500 font-bold">{lives}</span></div>
             <div>Уровень: <span className="text-yellow-500 font-bold">{level}</span></div>
             {weapon === 'spread-shot' && (
-              <div className="flex items-center gap-2">
-                <span className="text-green-400 text-xs md:text-base">⚡ Тройной выстрел</span>
+              <div className="flex items-center gap-1">
+                <span className="text-green-400 text-xs md:text-base">⚡ 3x</span>
               </div>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-white hover:text-primary transition-colors cursor-pointer"
+            className="text-white hover:text-primary transition-colors cursor-pointer flex-shrink-0"
             aria-label="Close game"
           >
-            <X size={32} />
+            <X size={24} className="md:w-8 md:h-8" />
           </button>
         </div>
 
@@ -395,19 +396,19 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
           ref={canvasRef}
           width={canvasSize.width}
           height={canvasSize.height}
-          className="border-4 border-primary rounded-lg shadow-[0_0_30px_rgba(225,29,72,0.5)] touch-none"
+          className="border-2 md:border-4 border-primary rounded-lg shadow-[0_0_20px_rgba(225,29,72,0.5)] md:shadow-[0_0_30px_rgba(225,29,72,0.5)] touch-none"
         />
 
         {/* Game Over overlay */}
         {gameState === 'gameOver' && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/80 rounded-lg">
             <div className="text-center px-4">
-              <h2 className="text-2xl md:text-4xl font-bold text-primary mb-4">Игра окончена</h2>
-              <p className="text-xl md:text-2xl text-white mb-2">Финальный счёт: {score}</p>
-              <p className="text-lg md:text-xl text-gray-400 mb-6">Уровень: {level}</p>
+              <h2 className="text-xl md:text-4xl font-bold text-primary mb-3 md:mb-4">Игра окончена</h2>
+              <p className="text-lg md:text-2xl text-white mb-2">Финальный счёт: {score}</p>
+              <p className="text-base md:text-xl text-gray-400 mb-4 md:mb-6">Уровень: {level}</p>
               <button
                 onClick={handleRestart}
-                className="px-6 py-3 bg-primary hover:bg-primary/80 text-white font-bold rounded-lg transition-colors cursor-pointer"
+                className="px-5 py-2 md:px-6 md:py-3 bg-primary hover:bg-primary/80 text-white text-sm md:text-base font-bold rounded-lg transition-colors cursor-pointer"
               >
                 Играть снова
               </button>
@@ -419,16 +420,16 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
         {gameState === 'paused' && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/80 rounded-lg">
             <div className="text-center px-4">
-              <h2 className="text-2xl md:text-4xl font-bold text-yellow-500 mb-4">Пауза</h2>
-              <p className="text-lg md:text-xl text-gray-400">Нажмите ESC для продолжения</p>
+              <h2 className="text-xl md:text-4xl font-bold text-yellow-500 mb-3 md:mb-4">Пауза</h2>
+              <p className="text-base md:text-xl text-gray-400">Нажмите ESC для продолжения</p>
             </div>
           </div>
         )}
 
         {/* Controls */}
-        <div className="text-center text-sm text-gray-400 font-mono mt-2">
+        <div className="text-center text-xs md:text-sm text-gray-400 font-mono mt-1 md:mt-2 px-2">
           <p className="hidden md:block">A/D или стрелки: Движение | W/Пробел: Стрельба | ESC: Пауза</p>
-          <p className="md:hidden">Касание: Движение и стрельба | Проведите пальцем для управления</p>
+          <p className="md:hidden">Проведите пальцем для управления</p>
         </div>
       </div>
     </div>

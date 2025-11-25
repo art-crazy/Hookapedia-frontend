@@ -2,8 +2,8 @@
 export const getCanvasSize = () => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   return {
-    width: isMobile ? Math.min(window.innerWidth - 32, 400) : 800,
-    height: isMobile ? Math.min(window.innerHeight - 200, 500) : 600,
+    width: isMobile ? Math.min(window.innerWidth - 40, 380) : 800,
+    height: isMobile ? Math.min(window.innerHeight - 280, 480) : 600,
   };
 };
 
