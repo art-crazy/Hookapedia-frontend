@@ -26,12 +26,15 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number>(0);
   const keysPressed = useRef<Set<string>>(new Set());
+  const touchStartX = useRef<number>(0);
+  const isTouching = useRef<boolean>(false);
 
   const [gameState, setGameState] = useState<GameState>('playing');
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [level, setLevel] = useState(1);
   const [weapon, setWeapon] = useState<WeaponType>('normal');
+  const [canvasSize, setCanvasSize] = useState({ width: CANVAS_WIDTH, height: CANVAS_HEIGHT });
 
   const playerRef = useRef<Position>({ x: 400, y: 550 });
   const bulletsRef = useRef<Bullet[]>([]);
@@ -40,11 +43,25 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
   const powerUpsRef = useRef<PowerUp[]>([]);
   const gameTimeRef = useRef(0);
   const lastShotRef = useRef(0);
+  const autoShootRef = useRef<boolean>(false);
 
-  // Initialize game
+  // Initialize game and setup canvas size
   useEffect(() => {
+    const updateSize = () => {
+      const isMobile = window.innerWidth < 768;
+      const newSize = {
+        width: isMobile ? Math.min(window.innerWidth - 32, 400) : 800,
+        height: isMobile ? Math.min(window.innerHeight - 200, 500) : 600,
+      };
+      setCanvasSize(newSize);
+      playerRef.current = { x: newSize.width / 2, y: newSize.height - 50 };
+    };
+
+    updateSize();
     enemiesRef.current = initEnemies(1);
-    playerRef.current = { x: CANVAS_WIDTH / 2, y: 550 };
+
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
   }, []);
 
   // Game loop
@@ -59,10 +76,10 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
 
     // Clear canvas
     ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
 
     // Draw stars background
-    drawStars(ctx, CANVAS_WIDTH, CANVAS_HEIGHT, gameTimeRef.current);
+    drawStars(ctx, canvasSize.width, canvasSize.height, gameTimeRef.current);
 
     // Update player position
     const player = playerRef.current;
@@ -70,11 +87,12 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
       player.x = Math.max(20, player.x - PLAYER_SPEED);
     }
     if (keysPressed.current.has('arrowright') || keysPressed.current.has('d')) {
-      player.x = Math.min(CANVAS_WIDTH - 20, player.x + PLAYER_SPEED);
+      player.x = Math.min(canvasSize.width - 20, player.x + PLAYER_SPEED);
     }
 
-    // Shooting
-    if (keysPressed.current.has(' ') || keysPressed.current.has('arrowup') || keysPressed.current.has('w')) {
+    // Auto-shooting on mobile or manual
+    const shouldShoot = keysPressed.current.has(' ') || keysPressed.current.has('arrowup') || keysPressed.current.has('w') || autoShootRef.current;
+    if (shouldShoot) {
       const now = Date.now();
       if (now - lastShotRef.current > SHOOT_COOLDOWN) {
         if (weapon === 'spread-shot') {
@@ -100,7 +118,7 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
     bulletsRef.current = bulletsRef.current.filter((bullet) => {
       if (bullet.isEnemy) {
         bullet.y += bullet.speed;
-        return bullet.y < CANVAS_HEIGHT;
+        return bullet.y < canvasSize.height;
       } else {
         bullet.y -= bullet.speed;
         return bullet.y > 0;
@@ -211,8 +229,8 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
         setWeapon('normal');
         particlesRef.current.push(...createExplosion(player.x, player.y, '#00ff00'));
         bulletsRef.current.splice(i, 1);
-        player.x = CANVAS_WIDTH / 2;
-        player.y = 550;
+        player.x = canvasSize.width / 2;
+        player.y = canvasSize.height - 50;
       }
     }
 
@@ -233,7 +251,7 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
     // Spawn power-ups randomly
     if (Math.random() < POWERUP_SPAWN_CHANCE && powerUpsRef.current.length === 0) {
       powerUpsRef.current.push({
-        x: Math.random() * (CANVAS_WIDTH - 100) + 50,
+        x: Math.random() * (canvasSize.width - 100) + 50,
         y: -20,
         type: 'spread-shot',
         speed: POWERUP_SPEED,
@@ -256,7 +274,7 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
     });
 
     // Remove power-ups that went off screen
-    powerUpsRef.current = powerUpsRef.current.filter((powerUp) => powerUp.y < CANVAS_HEIGHT + 20);
+    powerUpsRef.current = powerUpsRef.current.filter((powerUp) => powerUp.y < canvasSize.height + 20);
 
     // Draw player
     drawPlayer(ctx, player.x, player.y);
@@ -271,7 +289,7 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
     }
 
     requestRef.current = requestAnimationFrame(gameLoop);
-  }, [gameState, level, weapon]);
+  }, [gameState, level, weapon, canvasSize]);
 
   // Start game loop
   useEffect(() => {
@@ -289,6 +307,51 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
     );
   }, []);
 
+  // Touch controls for mobile
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      touchStartX.current = touch.clientX;
+      isTouching.current = true;
+      autoShootRef.current = true; // Auto-shoot while touching
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      if (!isTouching.current) return;
+
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - touchStartX.current;
+      const player = playerRef.current;
+
+      // Move player based on touch movement
+      player.x = Math.max(20, Math.min(canvasSize.width - 20, player.x + deltaX * 0.5));
+      touchStartX.current = touch.clientX;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      e.preventDefault();
+      isTouching.current = false;
+      autoShootRef.current = false;
+    };
+
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+    canvas.addEventListener('touchcancel', handleTouchEnd, { passive: false });
+
+    return () => {
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
+      canvas.removeEventListener('touchcancel', handleTouchEnd);
+    };
+  }, [canvasSize]);
+
   const handleRestart = () => {
     setScore(0);
     setLives(3);
@@ -300,7 +363,7 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
     powerUpsRef.current = [];
     gameTimeRef.current = 0;
     enemiesRef.current = initEnemies(1);
-    playerRef.current = { x: CANVAS_WIDTH / 2, y: 550 };
+    playerRef.current = { x: canvasSize.width / 2, y: canvasSize.height - 50 };
   };
 
   return (
@@ -308,13 +371,13 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
       <div className="relative flex flex-col items-center gap-4">
         {/* Game info and close button row */}
         <div className="w-full flex items-center justify-between">
-          <div className="flex gap-8 text-white font-mono text-lg">
+          <div className="flex gap-2 md:gap-8 text-white font-mono text-sm md:text-lg flex-wrap">
             <div>Очки: <span className="text-primary font-bold">{score}</span></div>
             <div>Жизни: <span className="text-green-500 font-bold">{lives}</span></div>
             <div>Уровень: <span className="text-yellow-500 font-bold">{level}</span></div>
             {weapon === 'spread-shot' && (
               <div className="flex items-center gap-2">
-                <span className="text-green-400">⚡ Тройной выстрел</span>
+                <span className="text-green-400 text-xs md:text-base">⚡ Тройной выстрел</span>
               </div>
             )}
           </div>
@@ -330,21 +393,21 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
         {/* Canvas */}
         <canvas
           ref={canvasRef}
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          className="border-4 border-primary rounded-lg shadow-[0_0_30px_rgba(225,29,72,0.5)]"
+          width={canvasSize.width}
+          height={canvasSize.height}
+          className="border-4 border-primary rounded-lg shadow-[0_0_30px_rgba(225,29,72,0.5)] touch-none"
         />
 
         {/* Game Over overlay */}
         {gameState === 'gameOver' && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/80 rounded-lg">
-            <div className="text-center">
-              <h2 className="text-4xl font-bold text-primary mb-4">Игра окончена</h2>
-              <p className="text-2xl text-white mb-2">Финальный счёт: {score}</p>
-              <p className="text-xl text-gray-400 mb-6">Уровень: {level}</p>
+            <div className="text-center px-4">
+              <h2 className="text-2xl md:text-4xl font-bold text-primary mb-4">Игра окончена</h2>
+              <p className="text-xl md:text-2xl text-white mb-2">Финальный счёт: {score}</p>
+              <p className="text-lg md:text-xl text-gray-400 mb-6">Уровень: {level}</p>
               <button
                 onClick={handleRestart}
-                className="px-6 py-3 bg-primary hover:bg-primary/80 text-white font-bold rounded-lg transition-colors"
+                className="px-6 py-3 bg-primary hover:bg-primary/80 text-white font-bold rounded-lg transition-colors cursor-pointer"
               >
                 Играть снова
               </button>
@@ -355,16 +418,17 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
         {/* Paused overlay */}
         {gameState === 'paused' && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/80 rounded-lg">
-            <div className="text-center">
-              <h2 className="text-4xl font-bold text-yellow-500 mb-4">Пауза</h2>
-              <p className="text-xl text-gray-400">Нажмите ESC для продолжения</p>
+            <div className="text-center px-4">
+              <h2 className="text-2xl md:text-4xl font-bold text-yellow-500 mb-4">Пауза</h2>
+              <p className="text-lg md:text-xl text-gray-400">Нажмите ESC для продолжения</p>
             </div>
           </div>
         )}
 
         {/* Controls */}
         <div className="text-center text-sm text-gray-400 font-mono mt-2">
-          <p>A/D или стрелки: Движение | W/Пробел: Стрельба | ESC: Пауза</p>
+          <p className="hidden md:block">A/D или стрелки: Движение | W/Пробел: Стрельба | ESC: Пауза</p>
+          <p className="md:hidden">Касание: Движение и стрельба | Проведите пальцем для управления</p>
         </div>
       </div>
     </div>

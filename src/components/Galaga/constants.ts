@@ -1,3 +1,12 @@
+// Адаптивные размеры canvas
+export const getCanvasSize = () => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  return {
+    width: isMobile ? Math.min(window.innerWidth - 32, 400) : 800,
+    height: isMobile ? Math.min(window.innerHeight - 200, 500) : 600,
+  };
+};
+
 export const CANVAS_WIDTH = 800;
 export const CANVAS_HEIGHT = 600;
 export const PLAYER_SPEED = 5;
