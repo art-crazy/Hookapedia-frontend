@@ -250,7 +250,7 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
       // Check collision with player
       if (checkCollision(powerUp.x, powerUp.y, player.x, player.y, 25)) {
         setWeapon('spread-shot');
-        particlesRef.current.push(...createExplosion(powerUp.x, powerUp.y, '#00ff64'));
+        particlesRef.current.push(...createExplosion(powerUp.x, powerUp.y, '#FFD700'));
         powerUpsRef.current.splice(index, 1);
       }
     });
