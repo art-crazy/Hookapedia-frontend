@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { Menu, Flame, BookOpen, X, ChevronRight, Home } from 'lucide-react';
+import { Menu, Flame, BookOpen, X, ChevronRight, Home, Gamepad2 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -195,7 +195,7 @@ export const MouseSpotlight: React.FC = () => {
   );
 };
 
-export const Header: React.FC = () => {
+export const Header: React.FC<{ onGameOpen: () => void }> = ({ onGameOpen }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const pathname = usePathname();
 
@@ -235,6 +235,14 @@ export const Header: React.FC = () => {
               {item.label}
             </Link>
           ))}
+          <button
+            onClick={onGameOpen}
+            className="flex items-center gap-2 text-sm font-medium text-muted hover:text-white transition-colors cursor-pointer"
+            aria-label="Play Galaga"
+          >
+            <Gamepad2 size={18} />
+            Играть
+          </button>
         </nav>
 
         {/* Mobile Toggle */}
@@ -265,6 +273,16 @@ export const Header: React.FC = () => {
                 <span className="text-lg">{item.label}</span>
               </Link>
             ))}
+            <button
+              onClick={() => {
+                onGameOpen();
+                setIsMobileMenuOpen(false);
+              }}
+              className="flex items-center gap-3 p-4 rounded-xl transition-colors text-gray-300 hover:bg-white/5 hover:text-white cursor-pointer"
+            >
+              <Gamepad2 size={18} />
+              <span className="text-lg">Играть</span>
+            </button>
           </nav>
         </div>
       )}

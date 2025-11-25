@@ -1,9 +1,14 @@
 import React from 'react';
-import { SeoHead } from '@/components/SeoHead';
 import { fetchRecipes, fetchCollections } from '@/services/api';
 import { generateOrganizationSchema, generateWebSiteSchema, generateBreadcrumbSchema, generateItemListSchema } from '@/utils/schema';
 import { siteConfig } from '@/config/site';
 import { HomePageClient } from '@/components/pages/HomePageClient';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Хукапедия - Энциклопедия кальянных миксов",
+    description: "Самая полная база миксов для кальяна. Подборки по вкусам, крепости и брендам. Советы от профессионалов.",
+};
 
 export default async function HomePage() {
     // Server‑side data fetching
@@ -25,11 +30,8 @@ export default async function HomePage() {
 
     return (
         <>
-            <SeoHead
-                title="Хукапедия - Энциклопедия кальянных миксов"
-                description="Самая полная база миксов для кальяна. Подборки по вкусам, крепости и брендам. Советы от профессионалов."
-                schema={websiteSchema}
-            />
+            {/* Website JSON‑LD */}
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
             {/* Organization JSON‑LD */}
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
             {/* Breadcrumb JSON‑LD */}

@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-export const DEFAULT_OG_IMAGE = 'https://kalyany-mix.ru/og-image.jpg';
+export const DEFAULT_OG_IMAGE = `${siteConfig.url.current}/og-image.jpg`;
 
 interface BuildMetadataParams {
     title: string;
@@ -41,11 +41,11 @@ export function buildMetadata({
         },
         keywords: keywords.join(', '),
         robots: {
-            index: false,
-            follow: false,
+            index: true,
+            follow: true,
             googleBot: {
-                index: false,
-                follow: false,
+                index: true,
+                follow: true,
                 'max-video-preview': -1,
                 'max-image-preview': 'large',
                 'max-snippet': -1,
