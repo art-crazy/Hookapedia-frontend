@@ -1,4 +1,4 @@
-import { Enemy } from './types';
+import { Enemy, PowerUp } from './types';
 import { ENEMY_COLORS } from './constants';
 
 // Draw player ship - classic pixel airplane
@@ -142,4 +142,90 @@ export const drawStars = (ctx: CanvasRenderingContext2D, canvasWidth: number, ca
     const y = (i * 73 + gameTime * 0.5) % canvasHeight;
     ctx.fillRect(x, y, 1, 1);
   }
+};
+
+// Draw power-up
+export const drawPowerUp = (ctx: CanvasRenderingContext2D, powerUp: PowerUp, gameTime: number) => {
+  const pulse = Math.sin(gameTime * 0.15) * 0.3 + 1;
+  const rotation = gameTime * 0.02;
+  const size = 16 * pulse;
+
+  ctx.save();
+  ctx.translate(powerUp.x, powerUp.y);
+  ctx.rotate(rotation);
+
+  // Outer glow (золотое свечение)
+  const outerGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 3);
+  outerGlow.addColorStop(0, 'rgba(255, 215, 0, 0.6)');
+  outerGlow.addColorStop(0.4, 'rgba(255, 165, 0, 0.4)');
+  outerGlow.addColorStop(1, 'rgba(255, 215, 0, 0)');
+  ctx.fillStyle = outerGlow;
+  ctx.fillRect(-size * 3, -size * 3, size * 6, size * 6);
+
+  // Inner glow
+  const innerGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 1.5);
+  innerGlow.addColorStop(0, 'rgba(255, 255, 200, 0.9)');
+  innerGlow.addColorStop(0.5, 'rgba(255, 215, 0, 0.6)');
+  innerGlow.addColorStop(1, 'rgba(255, 165, 0, 0.2)');
+  ctx.fillStyle = innerGlow;
+  ctx.fillRect(-size * 1.5, -size * 1.5, size * 3, size * 3);
+
+  // Star shape (золотая звезда)
+  const starGradient = ctx.createLinearGradient(-size, -size, size, size);
+  starGradient.addColorStop(0, '#FFD700');
+  starGradient.addColorStop(0.5, '#FFA500');
+  starGradient.addColorStop(1, '#FFD700');
+
+  ctx.fillStyle = starGradient;
+  ctx.strokeStyle = '#FFFFFF';
+  ctx.lineWidth = 2;
+  ctx.shadowColor = 'rgba(255, 215, 0, 0.8)';
+  ctx.shadowBlur = 10;
+
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const angle = (i * Math.PI) / 5 - Math.PI / 2;
+    const radius = i % 2 === 0 ? size : size * 0.5;
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.shadowBlur = 0;
+  ctx.restore();
+
+  // "BONUS" text below star
+  ctx.save();
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+  ctx.shadowBlur = 4;
+  ctx.shadowOffsetY = 2;
+
+  // Text background
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+  ctx.roundRect(powerUp.x - 28, powerUp.y + 20, 56, 16, 4);
+  ctx.fill();
+
+  // Text
+  const textPulse = Math.sin(gameTime * 0.2) * 0.1 + 1;
+  ctx.font = `bold ${11 * textPulse}px Arial`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // Text gradient
+  const textGradient = ctx.createLinearGradient(powerUp.x - 20, 0, powerUp.x + 20, 0);
+  textGradient.addColorStop(0, '#FFD700');
+  textGradient.addColorStop(0.5, '#FFF');
+  textGradient.addColorStop(1, '#FFD700');
+  ctx.fillStyle = textGradient;
+
+  ctx.fillText('BONUS', powerUp.x, powerUp.y + 28);
+
+  ctx.restore();
 };

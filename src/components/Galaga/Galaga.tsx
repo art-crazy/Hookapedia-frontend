@@ -1,20 +1,22 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { X } from 'lucide-react';
-import { Position, Bullet, Enemy, Particle, GameState } from './types';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {X} from 'lucide-react';
+import {Bullet, Enemy, GameState, Particle, Position, PowerUp, WeaponType} from './types';
 import {
-  CANVAS_WIDTH,
-  CANVAS_HEIGHT,
-  PLAYER_SPEED,
-  BULLET_SPEED,
-  ENEMY_BULLET_SPEED,
-  SHOOT_COOLDOWN,
-  ENEMY_POINTS
+    BULLET_SPEED,
+    CANVAS_HEIGHT,
+    CANVAS_WIDTH,
+    ENEMY_BULLET_SPEED,
+    ENEMY_POINTS,
+    PLAYER_SPEED,
+    POWERUP_SPAWN_CHANCE,
+    POWERUP_SPEED,
+    SHOOT_COOLDOWN
 } from './constants';
-import { drawPlayer, drawEnemy, drawStars } from './drawing';
-import { initEnemies, createExplosion, checkCollision } from './gameLogic';
-import { setupKeyboardControls } from './keyboard';
+import {drawEnemy, drawPlayer, drawPowerUp, drawStars} from './drawing';
+import {checkCollision, createExplosion, initEnemies} from './gameLogic';
+import {setupKeyboardControls} from './keyboard';
 
 interface GalagaProps {
   onClose: () => void;
@@ -29,17 +31,19 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [level, setLevel] = useState(1);
+  const [weapon, setWeapon] = useState<WeaponType>('normal');
 
   const playerRef = useRef<Position>({ x: 400, y: 550 });
   const bulletsRef = useRef<Bullet[]>([]);
   const enemiesRef = useRef<Enemy[]>([]);
   const particlesRef = useRef<Particle[]>([]);
+  const powerUpsRef = useRef<PowerUp[]>([]);
   const gameTimeRef = useRef(0);
   const lastShotRef = useRef(0);
 
   // Initialize game
   useEffect(() => {
-    enemiesRef.current = initEnemies();
+    enemiesRef.current = initEnemies(1);
     playerRef.current = { x: CANVAS_WIDTH / 2, y: 550 };
   }, []);
 
@@ -73,11 +77,21 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
     if (keysPressed.current.has(' ') || keysPressed.current.has('arrowup') || keysPressed.current.has('w')) {
       const now = Date.now();
       if (now - lastShotRef.current > SHOOT_COOLDOWN) {
-        bulletsRef.current.push({
-          x: player.x,
-          y: player.y - 20,
-          speed: BULLET_SPEED,
-        });
+        if (weapon === 'spread-shot') {
+          // Triple shot spread
+          bulletsRef.current.push(
+            { x: player.x, y: player.y - 20, speed: BULLET_SPEED, isPowerful: true },
+            { x: player.x - 10, y: player.y - 15, speed: BULLET_SPEED, isPowerful: true },
+            { x: player.x + 10, y: player.y - 15, speed: BULLET_SPEED, isPowerful: true }
+          );
+        } else {
+          // Normal shot
+          bulletsRef.current.push({
+            x: player.x,
+            y: player.y - 20,
+            speed: BULLET_SPEED,
+          });
+        }
         lastShotRef.current = now;
       }
     }
@@ -95,10 +109,27 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
 
     // Draw bullets
     bulletsRef.current.forEach((bullet) => {
-      ctx.fillStyle = bullet.isEnemy ? '#ff0000' : '#00ffff';
-      ctx.beginPath();
-      ctx.arc(bullet.x, bullet.y, 3, 0, Math.PI * 2);
-      ctx.fill();
+      if (bullet.isEnemy) {
+        ctx.fillStyle = '#ff0000';
+        ctx.beginPath();
+        ctx.arc(bullet.x, bullet.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Player bullets - more powerful ones are green
+        ctx.fillStyle = bullet.isPowerful ? '#00ff64' : '#00ffff';
+        ctx.beginPath();
+        ctx.arc(bullet.x, bullet.y, bullet.isPowerful ? 4 : 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Add glow for powerful bullets
+        if (bullet.isPowerful) {
+          ctx.strokeStyle = '#00ff64';
+          ctx.lineWidth = 2;
+          ctx.globalAlpha = 0.5;
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+      }
     });
 
     // Enemy movement and attacks
@@ -176,6 +207,8 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
           }
           return newLives;
         });
+        // Reset weapon to normal when hit
+        setWeapon('normal');
         particlesRef.current.push(...createExplosion(player.x, player.y, '#00ff00'));
         bulletsRef.current.splice(i, 1);
         player.x = CANVAS_WIDTH / 2;
@@ -197,17 +230,48 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
       return p.life > 0;
     });
 
+    // Spawn power-ups randomly
+    if (Math.random() < POWERUP_SPAWN_CHANCE && powerUpsRef.current.length === 0) {
+      powerUpsRef.current.push({
+        x: Math.random() * (CANVAS_WIDTH - 100) + 50,
+        y: -20,
+        type: 'spread-shot',
+        speed: POWERUP_SPEED,
+      });
+    }
+
+    // Update and draw power-ups
+    powerUpsRef.current.forEach((powerUp, index) => {
+      powerUp.y += powerUp.speed;
+
+      // Draw power-up first
+      drawPowerUp(ctx, powerUp, gameTimeRef.current);
+
+      // Check collision with player
+      if (checkCollision(powerUp.x, powerUp.y, player.x, player.y, 25)) {
+        setWeapon('spread-shot');
+        particlesRef.current.push(...createExplosion(powerUp.x, powerUp.y, '#00ff64'));
+        powerUpsRef.current.splice(index, 1);
+      }
+    });
+
+    // Remove power-ups that went off screen
+    powerUpsRef.current = powerUpsRef.current.filter((powerUp) => powerUp.y < CANVAS_HEIGHT + 20);
+
     // Draw player
     drawPlayer(ctx, player.x, player.y);
 
     // Check level complete
     if (enemiesRef.current.length === 0) {
-      setLevel((l) => l + 1);
-      enemiesRef.current = initEnemies();
+      setLevel((l) => {
+        const newLevel = l + 1;
+        enemiesRef.current = initEnemies(newLevel);
+        return newLevel;
+      });
     }
 
     requestRef.current = requestAnimationFrame(gameLoop);
-  }, [gameState, level]);
+  }, [gameState, level, weapon]);
 
   // Start game loop
   useEffect(() => {
@@ -219,22 +283,23 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
 
   // Keyboard controls
   useEffect(() => {
-    const cleanup = setupKeyboardControls(
-      keysPressed.current,
-      () => setGameState((s) => (s === 'playing' ? 'paused' : 'playing'))
+      return setupKeyboardControls(
+        keysPressed.current,
+        () => setGameState((s) => (s === 'playing' ? 'paused' : 'playing'))
     );
-    return cleanup;
   }, []);
 
   const handleRestart = () => {
     setScore(0);
     setLives(3);
     setLevel(1);
+    setWeapon('normal');
     setGameState('playing');
     bulletsRef.current = [];
     particlesRef.current = [];
+    powerUpsRef.current = [];
     gameTimeRef.current = 0;
-    enemiesRef.current = initEnemies();
+    enemiesRef.current = initEnemies(1);
     playerRef.current = { x: CANVAS_WIDTH / 2, y: 550 };
   };
 
@@ -247,6 +312,11 @@ export const Galaga: React.FC<GalagaProps> = ({ onClose }) => {
             <div>Очки: <span className="text-primary font-bold">{score}</span></div>
             <div>Жизни: <span className="text-green-500 font-bold">{lives}</span></div>
             <div>Уровень: <span className="text-yellow-500 font-bold">{level}</span></div>
+            {weapon === 'spread-shot' && (
+              <div className="flex items-center gap-2">
+                <span className="text-green-400">⚡ Тройной выстрел</span>
+              </div>
+            )}
           </div>
           <button
             onClick={onClose}

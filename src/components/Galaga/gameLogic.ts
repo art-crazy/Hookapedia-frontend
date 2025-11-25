@@ -2,10 +2,13 @@ import { Enemy, Particle } from './types';
 import { CANVAS_WIDTH } from './constants';
 
 // Initialize enemy formation
-export const initEnemies = (): Enemy[] => {
+export const initEnemies = (level: number = 1): Enemy[] => {
   const enemies: Enemy[] = [];
-  const rows = 5;
-  const cols = 10;
+
+  // На первом уровне меньше врагов для лёгкого старта
+  const rows = level === 1 ? 3 : 5;
+  const cols = level === 1 ? 8 : 10;
+
   const spacing = 60;
   const startX = (CANVAS_WIDTH - cols * spacing) / 2;
   const startY = 80;
