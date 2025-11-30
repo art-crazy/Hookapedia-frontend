@@ -11,6 +11,8 @@
 !.yarn/releases
 !.yarn/versions
 
+# === JetBrains IDE ===
+/.idea/
 
 # testing
 /coverage
