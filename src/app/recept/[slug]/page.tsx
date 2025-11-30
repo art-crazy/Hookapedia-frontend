@@ -10,9 +10,9 @@ import { siteConfig } from '@/config/site';
 import { RecipePageClient } from '@/components/pages/RecipePageClient';
 
 interface RecipePageProps {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 }
 
 export default async function RecipePage({ params }: RecipePageProps) {

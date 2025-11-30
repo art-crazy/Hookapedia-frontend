@@ -12,9 +12,9 @@ import { FilterState } from '@/types';
 import { CatalogPageClient } from '@/components/pages/CatalogPageClient';
 
 interface ReceptyFilteredPageProps {
-    params: {
+    params: Promise<{
         filters: string[];
-    };
+    }>;
 }
 
 export default async function ReceptyFilteredPage({ params }: ReceptyFilteredPageProps) {
