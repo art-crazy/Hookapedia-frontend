@@ -35,7 +35,7 @@ export function HomePageClient({
                 subtitle="Тысячи проверенных рецептов и профессиональные советы по забивке."
                 ctaText="Найти рецепт"
                 ctaLink="/recepty"
-                backgroundImage="https://images.unsplash.com/photo-1527661591475-527312dd65f5?q=80&w=2000&auto=format&fit=crop"
+                backgroundImage="/images/collections/hookah-session-summer.jpg"
             />
 
             {/* List 1: Featured/Large Cards - Mood */}

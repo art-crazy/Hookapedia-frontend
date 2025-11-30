@@ -250,7 +250,7 @@ export const RecipeCard: React.FC<{ recipe: Recipe; onClick?: () => void }> = ({
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
           onError={(e) => {
-            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?q=80&w=1000&auto=format&fit=crop';
+            (e.target as HTMLImageElement).src = '/images/collections/hookah-session-summer.jpg';
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60" />
@@ -404,7 +404,7 @@ export const RecipeDetailView: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
             alt={recipe.title}
             className="w-full h-full object-cover"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?q=80&w=1000&auto=format&fit=crop';
+              (e.target as HTMLImageElement).src = '/images/collections/hookah-session-summer.jpg';
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80" />

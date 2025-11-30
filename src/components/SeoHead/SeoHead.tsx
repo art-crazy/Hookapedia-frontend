@@ -13,7 +13,7 @@ interface SeoProps {
 export const SeoHead: React.FC<SeoProps> = ({
   title,
   description,
-  image = 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?q=80&w=1200',
+  image = '/images/collections/hookah-session-summer.jpg',
   type = 'website',
   schema
 }) => {
