@@ -39,7 +39,7 @@ export function HeroSection({
     };
 
     return (
-        <section className="relative min-h-[500px] md:h-[550px] flex items-center justify-center overflow-hidden py-12 md:py-0">
+        <section className="relative min-h-[500px] md:h-[550px] flex items-center justify-center overflow-hidden py-12 md:py-0 -mt-16">
             <div className="absolute inset-0 z-0">
                 <img
                     src={backgroundImage}
@@ -49,7 +49,7 @@ export function HeroSection({
                 <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/80 to-background" />
             </div>
 
-            <div className="relative z-10 container mx-auto px-4 text-center">
+            <div className="relative z-10 container mx-auto px-4 text-center pt-16">
                 {badge && (
                     <div className="inline-block py-1 px-3 rounded-full bg-primary/20 text-primary border border-primary/20 text-sm font-semibold mb-6 animate-pulse">
                         {badge}

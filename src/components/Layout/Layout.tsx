@@ -197,47 +197,87 @@ export const MouseSpotlight: React.FC = () => {
 
 export const Header: React.FC<{ onGameOpen: () => void }> = ({ onGameOpen }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
   const pathname = usePathname();
+  const isHomePage = pathname === '/';
+
+  // Handle scroll effect
+  React.useEffect(() => {
+    if (!isHomePage) return;
+
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isHomePage]);
 
   const navItems = [
     { label: 'Главная', path: '/', icon: <Flame size={18} /> },
     { label: 'Каталог', path: '/recepty', icon: <BookOpen size={18} /> },
   ];
 
+  // Dynamic header styles based on page and scroll state
+  const headerClasses = isHomePage && !isScrolled
+    ? "fixed top-0 z-50 w-full border-b border-transparent bg-transparent backdrop-blur-none transition-all duration-300"
+    : "fixed top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-md transition-all duration-300";
+
+  // Dynamic text colors for better visibility on transparent background
+  const isTransparent = isHomePage && !isScrolled;
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-md">
+    <header className={headerClasses}>
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2 cursor-pointer group"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold text-xl group-hover:shadow-[0_0_15px_rgba(225,29,72,0.5)] transition-shadow">
+          <div className={`w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold text-xl group-hover:shadow-[0_0_15px_rgba(225,29,72,0.5)] transition-all ${
+            isTransparent ? 'shadow-[0_0_10px_rgba(0,0,0,0.5)]' : ''
+          }`}>
             H
           </div>
-          <span className="font-bold text-xl tracking-tight text-white group-hover:text-primary transition-colors">
+          <span className={`font-bold text-xl tracking-tight group-hover:text-primary transition-colors ${
+            isTransparent ? 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]' : 'text-white'
+          }`}>
             Хукапедия
           </span>
         </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              href={item.path}
-              className={`flex items-center gap-2 text-sm font-medium transition-colors ${item.path === '/recepty'
-                ? (pathname.startsWith('/recepty') ? 'text-primary' : 'text-muted hover:text-white')
-                : (pathname === item.path ? 'text-primary' : 'text-muted hover:text-white')
+          {navItems.map((item) => {
+            const isActive = item.path === '/recepty'
+              ? pathname.startsWith('/recepty')
+              : pathname === item.path;
+
+            return (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`flex items-center gap-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'text-primary'
+                    : isTransparent
+                      ? 'text-white hover:text-primary drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'
+                      : 'text-muted hover:text-white'
                 }`}
-            >
-              {item.icon}
-              {item.label}
-            </Link>
-          ))}
+              >
+                {item.icon}
+                {item.label}
+              </Link>
+            );
+          })}
           <button
             onClick={onGameOpen}
-            className="flex items-center gap-2 text-sm font-medium text-muted hover:text-white transition-colors cursor-pointer"
+            className={`flex items-center gap-2 text-sm font-medium transition-colors cursor-pointer ${
+              isTransparent
+                ? 'text-white hover:text-primary drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'
+                : 'text-muted hover:text-white'
+            }`}
             aria-label="Play Galaga"
           >
             <Gamepad2 size={18} />
@@ -247,7 +287,9 @@ export const Header: React.FC<{ onGameOpen: () => void }> = ({ onGameOpen }) => 
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden text-white p-2"
+          className={`md:hidden p-2 transition-colors ${
+            isTransparent ? 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]' : 'text-white'
+          }`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Menu"
         >
