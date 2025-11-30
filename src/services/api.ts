@@ -35,7 +35,11 @@ export const fetchRecipes = async (
       return fetchMockRecipes(page, limit, filters);
     }
 
-    return await res.json();
+    const data = await res.json();
+    return {
+      recipes: data.items || [],
+      total: data.total || 0
+    };
   } catch (error) {
     console.error('Error fetching recipes:', error);
     return fetchMockRecipes(page, limit, filters);
