@@ -55,6 +55,7 @@ export interface Collection {
   name: string;
   description: string;
   image: string;
+  url?: string;
 }
 
 export type CollectionVariant = 'standard' | 'compact' | 'featured';

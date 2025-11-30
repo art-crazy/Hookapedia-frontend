@@ -5,27 +5,31 @@ import { Recipe, Collection } from '../types';
 export const COLLECTIONS_POPULAR: Collection[] = [
   {
     id: 1,
-    name: "Топ Недели",
-    description: "Самые популярные миксы по мнению сообщества.",
-    image: "/images/collections/hookah-smoke-top.jpg"
+    name: "Популярные рецепты",
+    description: "Самые востребованные миксы — проверенная классика от тысяч любителей кальяна.",
+    image: "/images/collections/hookah-smoke-top.jpg",
+    url: "/recepty"
   },
   {
     id: 2,
     name: "Для новичков",
-    description: "Легкие и понятные миксы, с которых стоит начать.",
-    image: "/images/collections/hookah-coals-beginners.jpg"
+    description: "Мягкие рецепты легкой крепости — идеальный старт в мире кальяна.",
+    image: "/images/collections/hookah-coals-beginners.jpg",
+    url: "/recepty/legkaya-krepost"
   },
   {
     id: 3,
-    name: "Летний бриз",
-    description: "Освежающие миксы с цитрусами, мятой и льдом.",
-    image: "/images/collections/hookah-session-summer.jpg"
+    name: "Ледяной цитрус",
+    description: "Освежающие цитрусовые миксы с мощным холодом — спасение в жару.",
+    image: "/images/collections/hookah-session-summer.jpg",
+    url: "/recepty/tsitrusovye/silnyy-kholod"
   },
   {
     id: 4,
-    name: "Крепкая полка",
-    description: "Миксы на основе сигарного сырья для профи.",
-    image: "/images/collections/hookah-session-summer.jpg"
+    name: "Для профи",
+    description: "Крепкие насыщенные миксы высокой жаростойкости для опытных.",
+    image: "/images/collections/hookah-session-summer.jpg",
+    url: "/recepty/krepkaya-krepost"
   }
 ];
 
@@ -33,33 +37,45 @@ export const COLLECTIONS_POPULAR: Collection[] = [
 export const COLLECTIONS_FLAVORS: Collection[] = [
   {
     id: 5,
-    name: "Ягодные",
-    description: "Сладкие и кислые",
-    image: "/images/collections/berries-mix.jpg"
+    name: "Ягоды",
+    description: "Клубника, малина, вишня",
+    image: "/images/collections/berries-mix.jpg",
+    url: "/recepty/yagody"
   },
   {
     id: 6,
-    name: "Тропики",
-    description: "Манго и ананас",
-    image: "/images/collections/tropical-fruits.jpg"
+    name: "Экзотика",
+    description: "Манго, маракуйя, личи",
+    image: "/images/collections/tropical-fruits.jpg",
+    url: "/recepty/ekzotika"
   },
   {
     id: 7,
     name: "Десерты",
-    description: "Выпечка и кремы",
-    image: "/images/collections/dessert-coffee.jpg"
+    description: "Выпечка, крем, карамель",
+    image: "/images/collections/dessert-coffee.jpg",
+    url: "/recepty/deserty"
   },
   {
     id: 8,
-    name: "Цитрус",
-    description: "Лайм и грейпфрут",
-    image: "/images/collections/citrus-fresh.jpg"
+    name: "Цитрусы",
+    description: "Лайм, грейпфрут, лимон",
+    image: "/images/collections/citrus-fresh.jpg",
+    url: "/recepty/tsitrusovye"
   },
   {
     id: 12,
-    name: "Напитки",
-    description: "Чай, кола, лимонад",
-    image: "/images/collections/drinks-beverages.jpg"
+    name: "Фрукты",
+    description: "Персик, дыня, яблоко",
+    image: "/images/collections/drinks-beverages.jpg",
+    url: "/recepty/frukty"
+  },
+  {
+    id: 13,
+    name: "Пряности",
+    description: "Травы, специи, чай",
+    image: "/images/collections/spiced-tea.jpg",
+    url: "/recepty/pryanosti-travy"
   }
 ];
 
@@ -67,21 +83,31 @@ export const COLLECTIONS_FLAVORS: Collection[] = [
 export const COLLECTIONS_MOOD: Collection[] = [
   {
     id: 9,
-    name: "Вечерний Chill",
-    description: "Идеально для расслабления после работы. Глубокие, спокойные вкусы, которые помогут отвлечься от суеты. Чайные ноты, травы и легкая прохлада.",
-    image: "/images/collections/hookah-session-summer.jpg"
+    name: "Теплый вечер",
+    description: "Уютные пряные миксы без холода для расслабления. Чайные ноты, травы и специи создают атмосферу спокойствия после долгого дня.",
+    image: "/images/collections/spiced-tea.jpg",
+    url: "/recepty/pryanosti-travy/bez-kholoda"
   },
   {
     id: 10,
-    name: "Шумная Вечеринка",
-    description: "Яркие, дерзкие и крепкие миксы, которые удивят компанию. Максимум вкуса и дыма для долгой ночи.",
-    image: "/images/collections/party-night.jpg"
+    name: "Крепкие ягоды",
+    description: "Мощные миксы с насыщенными ягодными вкусами. Черника, вишня и смородина высокой крепости — для тех, кто знает толк в кальяне.",
+    image: "/images/collections/berries-mix.jpg",
+    url: "/recepty/krepkaya-krepost/yagody"
   },
   {
     id: 11,
-    name: "Романтический вечер",
-    description: "Нежные, сладкие и интригующие сочетания для двоих. Клубника, шампанское и лепестки роз.",
-    image: "/images/collections/romantic-evening.jpg"
+    name: "Сладкая мята",
+    description: "Нежные десертные миксы с мягкой мятой без ледяного эффекта. Кремовая выпечка, ваниль и карамель в гармонии со свежестью.",
+    image: "/images/collections/dessert-coffee.jpg",
+    url: "/recepty/deserty/bez-kholoda/s-myatoy"
+  },
+  {
+    id: 14,
+    name: "Ягоды и мята",
+    description: "Классическое сочетание сочных ягод с освежающей мятой. Клубничная сладость, малиновая кислинка и мятная свежесть — вечная классика.",
+    image: "/images/collections/berries-mix.jpg",
+    url: "/recepty/yagody/s-myatoy"
   }
 ];
 

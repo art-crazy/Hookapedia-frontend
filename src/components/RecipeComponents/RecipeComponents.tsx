@@ -185,7 +185,7 @@ export const CollectionList: React.FC<{
       <div className="modern-scroll pb-6 w-full">
         <div className="flex gap-4 md:gap-6 w-max">
           {collections.map(col => (
-            <Link href={`/recepty?collection=${col.id}`} key={col.id} className="block">
+            <Link href={col.url || `/recepty`} key={col.id} className="block">
               <CollectionCard
                 collection={col}
                 variant={variant}
