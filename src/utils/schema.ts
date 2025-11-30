@@ -1,3 +1,4 @@
+import { siteConfig } from '@/config/site';
 
 /**
  * Generate Organization schema for the website
@@ -46,7 +47,7 @@ export function generateRecipeSchema(recipe: any, baseUrl: string) {
         image: recipe.imageUrl ? [recipe.imageUrl] : [],
         author: {
             '@type': 'Person',
-            name: recipe.author || 'Hookapedia'
+            name: recipe.author || siteConfig.brand.name
         },
         datePublished: recipe.createdAt,
         description: recipe.description,

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         }
 
         const ingredientNames = recipe.ingredients.map(i => i.name).join(', ');
-        const title = `${recipe.title} — рецепт кальяна | Hookapedia`;
+        const title = `${recipe.title} — рецепт кальяна | ${siteConfig.brand.name}`;
         const description = `Как забить ${recipe.title}. Состав: ${ingredientNames}. Крепость: ${recipe.strength}/10. Подробная инструкция и советы.`;
 
         const keywords = [

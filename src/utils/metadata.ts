@@ -29,10 +29,10 @@ export function buildMetadata({
         metadataBase: new URL(siteConfig.url.current),
         title,
         description,
-        applicationName: 'Hookapedia',
-        authors: [{ name: 'Hookapedia Team', url: siteConfig.url.current }],
-        creator: 'Hookapedia',
-        publisher: 'Hookapedia',
+        applicationName: siteConfig.brand.name,
+        authors: [{ name: `Команда ${siteConfig.brand.name}`, url: siteConfig.url.current }],
+        creator: siteConfig.brand.name,
+        publisher: siteConfig.brand.name,
         formatDetection: {
             telephone: false,
             date: false,
@@ -58,7 +58,7 @@ export function buildMetadata({
             title: ogTitle || title,
             description: ogDescription || description,
             url,
-            siteName: 'Hookapedia',
+            siteName: siteConfig.brand.fullName,
             images: [
                 {
                     url: ogImage,

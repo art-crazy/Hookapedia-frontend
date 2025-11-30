@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next'
+import { siteConfig } from '@/config/site'
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: 'Hookapedia',
-        short_name: 'Hookapedia',
+        name: siteConfig.brand.fullName,
+        short_name: siteConfig.brand.name,
         description: 'Энциклопедия кальянных миксов',
         start_url: '/',
         display: 'standalone',

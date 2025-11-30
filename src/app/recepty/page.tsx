@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 import { buildMetadata } from '@/utils/metadata';
 
 export const metadata: Metadata = buildMetadata({
-    title: "Рецепты кальянных миксов - Hookapedia",
+    title: `Рецепты кальянных миксов - ${siteConfig.brand.name}`,
     description: "Подбор кальянных миксов по крепости, вкусу, наличию мяты и холодка. Огромная база рецептов.",
     url: `${siteConfig.url.current}/recepty`,
 });

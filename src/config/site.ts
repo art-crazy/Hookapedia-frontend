@@ -1,11 +1,16 @@
 export const siteConfig = {
+    brand: {
+        name: 'Хукапедия',
+        fullName: 'Хукапедия | Кальяны Микс',
+        domain: 'Кальяны Микс'
+    },
     url: {
         current: 'https://kalyany-mix.ru',
         canonical: 'https://kalyany-mix.ru'
     },
     metadata: {
-        name: 'Hookapedia',
-        title: 'Hookapedia — Энциклопедия кальянных миксов',
+        name: 'Хукапедия',
+        title: 'Хукапедия | Кальяны Микс — Энциклопедия кальянных миксов',
         description: 'Лучшие рецепты кальянных миксов с подробными инструкциями. Найдите идеальный микс табака для кальяна, крепость и советы по чашам.',
         keywords: [
             'рецепты кальянов',
@@ -15,7 +20,8 @@ export const siteConfig = {
             'миксы табака',
             'кальян рецепты',
             'табак для кальяна',
-            'hookapedia'
+            'хукапедия',
+            'кальяны микс'
         ]
     }
 };

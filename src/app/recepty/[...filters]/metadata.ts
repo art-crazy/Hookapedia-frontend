@@ -41,8 +41,8 @@ function generateMetadataForFilters(filters: string[]) {
 
     const filterText = parts.length > 0 ? parts.join(', ') : '';
     const title = filterText
-        ? `Рецепты кальянов: ${filterText} — Hookapedia`
-        : 'Рецепты кальянных миксов — Hookapedia';
+        ? `Рецепты кальянов: ${filterText} — ${siteConfig.brand.name}`
+        : `Рецепты кальянных миксов — ${siteConfig.brand.name}`;
 
     const description = filterText
         ? `Подборка рецептов кальянов с фильтрами: ${filterText}. Лучшие миксы табака с инструкциями и советами.`

@@ -28,7 +28,7 @@ export default function GlossaryPage() {
     return (
         <div className="container mx-auto px-4 py-8">
             <SeoHead
-                title="Глоссарий кальянных терминов - Hookapedia"
+                title={`Глоссарий кальянных терминов - ${siteConfig.brand.name}`}
                 description="Полный словарь терминов кальянной индустрии. Узнайте, что такое оверпак, мелассоуловитель, касание и другие понятия."
                 schema={glossarySchema}
             />
