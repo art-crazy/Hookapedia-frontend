@@ -3,7 +3,7 @@ import { buildMetadata, DEFAULT_OG_IMAGE } from '@/utils/metadata';
 import { siteConfig } from '@/config/site';
 
 const baseMetadata = buildMetadata({
-    title: "Хукапедия — лучшие миксы табака и инструкции",
+    title: `${siteConfig.brand.fullName} — лучшие миксы табака и инструкции`,
     description: "Соберите идеальный кальян: проверенные рецепты, пропорции, жаростойкость и советы по чашам.",
     url: siteConfig.url.current,
     ogImage: DEFAULT_OG_IMAGE,

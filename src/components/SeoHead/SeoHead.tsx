@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { siteConfig } from '@/config/site';
 
 interface SeoProps {
   title: string;
@@ -28,7 +29,7 @@ export const SeoHead: React.FC<SeoProps> = ({
     updateMeta('og:description', description);
     updateMeta('og:image', image);
     updateMeta('og:type', type);
-    updateMeta('og:site_name', 'Хукапедия');
+    updateMeta('og:site_name', siteConfig.brand.fullName);
 
     // Twitter
     updateMeta('twitter:card', 'summary_large_image');

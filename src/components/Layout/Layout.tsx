@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { Menu, Flame, BookOpen, X, ChevronRight, Home, Gamepad2 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { siteConfig } from '@/config/site';
 
 export const MouseSpotlight: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -243,7 +244,7 @@ export const Header: React.FC<{ onGameOpen: () => void }> = ({ onGameOpen }) => 
           <span className={`font-bold text-xl tracking-tight group-hover:text-primary transition-colors ${
             isTransparent ? 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]' : 'text-white'
           }`}>
-            Хукапедия
+            {siteConfig.brand.fullName}
           </span>
         </Link>
 
@@ -336,7 +337,7 @@ export const Footer: React.FC = () => (
   <footer className="border-t border-white/10 bg-surface py-8 mt-auto">
     <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-muted">
       <div className="text-center md:text-left">
-        <p className="font-semibold text-white mb-1">Хукапедия</p>
+        <p className="font-semibold text-white mb-1">{siteConfig.brand.fullName}</p>
         <p>&copy; 2025 Энциклопедия кальянных рецептов.</p>
       </div>
       <div className="flex gap-6">

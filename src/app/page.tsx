@@ -6,7 +6,7 @@ import { HomePageClient } from '@/components/pages/HomePageClient';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "Хукапедия - Энциклопедия кальянных миксов",
+    title: `${siteConfig.brand.fullName} — Энциклопедия кальянных миксов`,
     description: "Самая полная база миксов для кальяна. Подборки по вкусам, крепости и брендам. Советы от профессионалов.",
 };
 
@@ -40,7 +40,7 @@ export default async function HomePage() {
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
 
             {/* Hidden H1 for SEO */}
-            <h1 className="sr-only">Хукапедия — Главная страница кальянных миксов</h1>
+            <h1 className="sr-only">{siteConfig.brand.fullName} — Главная страница кальянных миксов</h1>
 
             <HomePageClient
                 featuredCollections={collectionsData.mood}

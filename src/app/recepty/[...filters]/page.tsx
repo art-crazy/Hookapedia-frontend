@@ -2,6 +2,7 @@ import React from 'react';
 import { SeoHead } from '@/components/SeoHead';
 import { Breadcrumbs } from '@/components/Layout';
 import { fetchRecipes } from '@/services/api';
+import { siteConfig } from '@/config/site';
 import {
     getStrengthBySlug,
     getFlavorBySlug,
@@ -60,7 +61,7 @@ export default async function ReceptyFilteredPage({ params }: ReceptyFilteredPag
     return (
         <div className="container mx-auto px-4 py-8">
             <SeoHead
-                title="Рецепты кальянных миксов - Хукапедия"
+                title={`Рецепты кальянных миксов - ${siteConfig.brand.name}`}
                 description="Подбор кальянных миксов по крепости, вкусу, наличию мяты и холодка. Огромная база рецептов."
             />
 
