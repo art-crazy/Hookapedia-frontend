@@ -12,7 +12,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
             <MouseSpotlight />
             <Header onGameOpen={() => setIsGameOpen(true)} />
 
-            <main className="flex-grow">
+            <main className="flex-grow pt-16">
                 {children}
             </main>
 
