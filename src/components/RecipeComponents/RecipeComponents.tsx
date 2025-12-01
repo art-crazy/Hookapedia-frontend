@@ -245,7 +245,7 @@ export const RecipeCard: React.FC<{ recipe: Recipe; onClick?: () => void }> = ({
     >
       <div className="relative h-48 md:h-56 overflow-hidden">
         <img
-          src={recipe.imageUrl}
+          src={recipe.imageMain}
           alt={recipe.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
@@ -400,7 +400,7 @@ export const RecipeDetailView: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
         {/* Image Section */}
         <div className="relative rounded-2xl overflow-hidden aspect-[4/3] md:aspect-auto h-full min-h-[300px] md:min-h-[400px]">
           <img
-            src={recipe.imageUrl}
+            src={recipe.imageMain}
             alt={recipe.title}
             className="w-full h-full object-cover"
             onError={(e) => {

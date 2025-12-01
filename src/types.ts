@@ -26,27 +26,46 @@ export interface Ingredient {
   percentage: number;
   amount?: number;
   unit?: string;
+  tobaccoType?: string;
+}
+
+export interface Charcoal {
+  size: string;
+  type: string;
+  brand: string;
+  pieces: number;
 }
 
 export interface Recipe {
   id: string | number;
-  slug?: string; // URL-friendly transliterated slug
+  name: string; // URL-friendly slug
   title: string;
   description: string;
-  imageUrl: string;
+  imageMain: string;
   ingredients: Ingredient[];
-  strength: number; // 1-10
+  preparationTime?: string;
+  smokingDuration?: string;
+  difficulty?: string;
+  recipeType?: string;
+  persons?: number;
+  bowlType?: string;
+  packingMethod?: string;
+  charcoal?: Charcoal;
+  smokeLevel?: string;
+  strength?: number; // 1-10, опционально для обратной совместимости
 
-  // New categorization fields
-  strengthCategory?: string; // id from strengthCategories
-  mintCategory?: string;     // id from mintCategories
-  coolingCategory?: string;  // id from coolingCategories
-  flavorCategory?: string;   // id from flavorCategoryCategories
+  // Categorization fields
+  strengthCategory?: string;
+  mintCategory?: string;
+  coolingCategory?: string;
+  flavorCategory?: string;
 
   tags: string[];
-  author: string;
-  createdAt: string;
+  tips?: string[];
+  rating?: string;
+  reviews?: number;
   likes: number;
+  updatedAt?: string;
   steps?: { title: string; text: string; image?: string }[];
 }
 

@@ -114,21 +114,21 @@ export const COLLECTIONS_MOOD: Collection[] = [
 export const MOCK_RECIPES: Recipe[] = [
   {
     id: 101,
+    name: "tsitrusovyy-vzryv",
     title: "Цитрусовый Взрыв",
     description: "Яркий кисло-сладкий микс грейпфрута и лайма с ноткой мяты.",
-    imageUrl: "/images/collections/citrus-fresh.jpg",
+    imageMain: "/images/collections/citrus-fresh.jpg",
     strength: 5,
     tags: ["tsitrusovye", "svezhiy"],
-    
+
     // Categorization
     strengthCategory: 'srednyaya-krepost',
     flavorCategory: 'tsitrusovye',
     mintCategory: 's-myatoy',
     coolingCategory: 'legkiy-kholod',
-    
-    author: "HookahMaster",
-    createdAt: new Date().toISOString(),
+
     likes: 124,
+    updatedAt: new Date().toISOString(),
     ingredients: [
       { name: "Pinkman", percentage: 40, brand: "Musthave" },
       { name: "Lime", percentage: 40, brand: "Darkside" },
@@ -141,20 +141,20 @@ export const MOCK_RECIPES: Recipe[] = [
   },
   {
     id: 102,
+    name: "yagodnyy-pirog",
     title: "Ягодный Пирог",
     description: "Нежный десертный вкус свежей выпечки с черникой и малиной.",
-    imageUrl: "/images/collections/berries-mix.jpg",
+    imageMain: "/images/collections/berries-mix.jpg",
     strength: 4,
     tags: ["deserty", "yagody"],
-    
+
     strengthCategory: 'legkaya-krepost',
     flavorCategory: 'deserty',
     mintCategory: 'bez-myaty',
     coolingCategory: 'bez-kholoda',
 
-    author: "SweetTooth",
-    createdAt: new Date().toISOString(),
     likes: 89,
+    updatedAt: new Date().toISOString(),
     ingredients: [
       { name: "Blueberry", percentage: 50, brand: "Daily Hookah" },
       { name: "Raspberry", percentage: 30, brand: "Daily Hookah" },
@@ -163,20 +163,20 @@ export const MOCK_RECIPES: Recipe[] = [
   },
   {
     id: 103,
+    name: "tropicheskiy-sheyk",
     title: "Тропический Шейк",
     description: "Сладкий манго и маракуйя в сочетании с ледяной крошкой.",
-    imageUrl: "/images/collections/tropical-fruits.jpg",
+    imageMain: "/images/collections/tropical-fruits.jpg",
     strength: 6,
     tags: ["ekzotika", "frukty"],
-    
+
     strengthCategory: 'srednyaya-krepost',
     flavorCategory: 'ekzotika',
     mintCategory: 'bez-myaty',
     coolingCategory: 'silnyy-kholod',
 
-    author: "SummerVibes",
-    createdAt: new Date().toISOString(),
     likes: 210,
+    updatedAt: new Date().toISOString(),
     ingredients: [
       { name: "Mango Lassi", percentage: 60, brand: "Black Burn" },
       { name: "Passion Fruit", percentage: 30, brand: "Element" },
@@ -185,20 +185,20 @@ export const MOCK_RECIPES: Recipe[] = [
   },
   {
     id: 104,
+    name: "sibirskaya-noch",
     title: "Сибирская Ночь",
     description: "Крепкий хвойный микс с эвкалиптом и лесными ягодами.",
-    imageUrl: "/images/collections/romantic-evening.jpg",
+    imageMain: "/images/collections/romantic-evening.jpg",
     strength: 9,
     tags: ["pryanosti-travy", "krepkiy"],
-    
+
     strengthCategory: 'krepkaya-krepost',
     flavorCategory: 'pryanosti-travy',
     mintCategory: 's-myatoy',
     coolingCategory: 'legkiy-kholod',
 
-    author: "HardcoreSmoker",
-    createdAt: new Date().toISOString(),
     likes: 56,
+    updatedAt: new Date().toISOString(),
     ingredients: [
       { name: "Needls", percentage: 50, brand: "Darkside" },
       { name: "Wildberry", percentage: 30, brand: "Musthave" },
@@ -207,20 +207,20 @@ export const MOCK_RECIPES: Recipe[] = [
   },
   {
     id: 105,
+    name: "utrenniy-kofe",
     title: "Утренний Кофе",
     description: "Ароматный капучино с карамельным сиропом.",
-    imageUrl: "/images/collections/dessert-coffee.jpg",
+    imageMain: "/images/collections/dessert-coffee.jpg",
     strength: 5,
     tags: ["deserty", "napitki"],
-    
+
     strengthCategory: 'srednyaya-krepost',
     flavorCategory: 'deserty',
     mintCategory: 'bez-myaty',
     coolingCategory: 'bez-kholoda',
 
-    author: "Barista",
-    createdAt: new Date().toISOString(),
     likes: 145,
+    updatedAt: new Date().toISOString(),
     ingredients: [
       { name: "Coffee", percentage: 60, brand: "Satyr" },
       { name: "Caramel", percentage: 30, brand: "Darkside" },
@@ -229,20 +229,20 @@ export const MOCK_RECIPES: Recipe[] = [
   },
   {
     id: 106,
+    name: "granatovyy-fresh",
     title: "Гранатовый Фреш",
     description: "Терпкий гранат с нотками киви и клубники.",
-    imageUrl: "/images/collections/hookah-session-summer.jpg",
+    imageMain: "/images/collections/hookah-session-summer.jpg",
     strength: 7,
     tags: ["frukty", "kislyy"],
-    
+
     strengthCategory: 'krepkaya-krepost',
     flavorCategory: 'frukty',
     mintCategory: 'bez-myaty',
     coolingCategory: 'bez-kholoda',
 
-    author: "JuicyMaker",
-    createdAt: new Date().toISOString(),
     likes: 92,
+    updatedAt: new Date().toISOString(),
     ingredients: [
       { name: "Pomegranate", percentage: 50, brand: "Chabacco" },
       { name: "Kiwi", percentage: 30, brand: "Sebero" },
@@ -251,18 +251,18 @@ export const MOCK_RECIPES: Recipe[] = [
   },
   {
     id: 107,
+    name: "ledyanaya-dynya",
     title: "Ледяная Дыня",
     description: "Сочная сладкая дыня с мощным кулером. Идеально для жары.",
-    imageUrl: "/images/collections/hookah-session-summer.jpg",
+    imageMain: "/images/collections/hookah-session-summer.jpg",
     strength: 4,
     tags: ["frukty", "svezhiy"],
     strengthCategory: 'legkaya-krepost',
     flavorCategory: 'frukty',
     mintCategory: 'bez-myaty',
     coolingCategory: 'silnyy-kholod',
-    author: "IceKing",
-    createdAt: new Date().toISOString(),
     likes: 67,
+    updatedAt: new Date().toISOString(),
     ingredients: [
       { name: "Melon", percentage: 70, brand: "Musthave" },
       { name: "Supernova", percentage: 30, brand: "Darkside" }
@@ -270,18 +270,18 @@ export const MOCK_RECIPES: Recipe[] = [
   },
   {
     id: 108,
+    name: "vishnevyy-kokteyl",
     title: "Вишневый Коктейль",
     description: "Насыщенный вкус вишневого сока с льдом и долькой лимона.",
-    imageUrl: "/images/collections/cherry-cocktail.jpg",
+    imageMain: "/images/collections/cherry-cocktail.jpg",
     strength: 6,
     tags: ["yagody", "napitki"],
     strengthCategory: 'srednyaya-krepost',
     flavorCategory: 'yagody',
     mintCategory: 'bez-myaty',
     coolingCategory: 'legkiy-kholod',
-    author: "CherryBomb",
-    createdAt: new Date().toISOString(),
     likes: 112,
+    updatedAt: new Date().toISOString(),
     ingredients: [
       { name: "Cherry", percentage: 50, brand: "Element" },
       { name: "Cola", percentage: 30, brand: "Darkside" },
@@ -290,18 +290,18 @@ export const MOCK_RECIPES: Recipe[] = [
   },
   {
     id: 109,
+    name: "pryaniy-chay",
     title: "Пряный Чай",
     description: "Уютный микс черного чая с бергамотом и пряностями.",
-    imageUrl: "/images/collections/spiced-tea.jpg",
+    imageMain: "/images/collections/spiced-tea.jpg",
     strength: 5,
     tags: ["napitki", "pryanosti-travy"],
     strengthCategory: 'srednyaya-krepost',
     flavorCategory: 'pryanosti-travy',
     mintCategory: 'bez-myaty',
     coolingCategory: 'bez-kholoda',
-    author: "TeaLover",
-    createdAt: new Date().toISOString(),
     likes: 85,
+    updatedAt: new Date().toISOString(),
     ingredients: [
       { name: "Earl Grey", percentage: 60, brand: "Chabacco" },
       { name: "Spices", percentage: 40, brand: "Satyr" }

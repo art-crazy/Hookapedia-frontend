@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             keywords: [...new Set(keywords)],
             ogTitle: title,
             ogDescription: description,
-            ogImage: recipe.imageUrl,
+            ogImage: recipe.imageMain,
             type: 'article'
         });
     } catch (error) {

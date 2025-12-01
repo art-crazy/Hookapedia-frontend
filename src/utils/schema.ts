@@ -44,12 +44,12 @@ export function generateRecipeSchema(recipe: any, baseUrl: string) {
         '@context': 'https://schema.org',
         '@type': 'Recipe',
         name: recipe.title,
-        image: recipe.imageUrl ? [recipe.imageUrl] : [],
+        image: recipe.imageMain ? [recipe.imageMain] : [],
         author: {
             '@type': 'Person',
-            name: recipe.author || siteConfig.brand.name
+            name: siteConfig.brand.name
         },
-        datePublished: recipe.createdAt,
+        datePublished: recipe.updatedAt,
         description: recipe.description,
         recipeIngredient: recipe.ingredients?.map((i: any) =>
             `${i.percentage}% ${i.name}${i.brand ? ` (${i.brand})` : ''}`
@@ -61,10 +61,10 @@ export function generateRecipeSchema(recipe: any, baseUrl: string) {
             position: index + 1,
             image: step.image
         })) || [],
-        aggregateRating: recipe.likes ? {
+        aggregateRating: recipe.rating ? {
             '@type': 'AggregateRating',
-            ratingValue: Math.min(5, Math.max(1, recipe.likes / 20)),
-            reviewCount: recipe.likes
+            ratingValue: recipe.rating,
+            reviewCount: recipe.reviews || recipe.likes
         } : undefined,
         keywords: recipe.tags?.join(', ') || ''
     };

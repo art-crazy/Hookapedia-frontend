@@ -25,12 +25,12 @@ export function toSlug(text: string): string {
 
 /**
  * Generates a recipe slug in the format:
- * [slug]-[id] or [transliterated-title]-[id]
+ * [name]-[id] or [transliterated-title]-[id]
  * Example: tsitrusovyy-vzryv-101
  */
 export function generateRecipeSlug(recipe: Recipe): string {
-    // Use recipe.slug if available, otherwise transliterate the title
-    const baseSlug = recipe.slug || toSlug(recipe.title);
+    // Use recipe.name if available, otherwise transliterate the title
+    const baseSlug = recipe.name || toSlug(recipe.title);
     return `${baseSlug}-${recipe.id}`;
 }
 

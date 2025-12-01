@@ -26,6 +26,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
     // Server-side data fetching
     const recipe = await fetchRecipeById(recipeId);
 
+    console.log('recipe', recipe)
     if (!recipe) {
         notFound();
     }
@@ -40,7 +41,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
             <SeoHead
                 title={`${recipe.title} - рецепт кальяна`}
                 description={`Как забить ${recipe.title}. Состав: ${recipe.ingredients.map(i => i.name).join(', ')}. Крепость: ${recipe.strength}/10.`}
-                image={recipe.imageUrl}
+                image={recipe.imageMain}
                 type="article"
                 schema={recipeSchema}
             />
