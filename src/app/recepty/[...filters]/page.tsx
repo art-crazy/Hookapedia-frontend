@@ -11,16 +11,25 @@ import {
 } from '@/services/categories';
 import { FilterState } from '@/types';
 import { CatalogPageClient } from '@/components/pages/CatalogPageClient';
+import { RECIPES_PER_PAGE } from '@/config/pagination';
 
 interface ReceptyFilteredPageProps {
     params: Promise<{
         filters: string[];
     }>;
+    searchParams: Promise<{
+        page?: string;
+    }>;
 }
 
-export default async function ReceptyFilteredPage({ params }: ReceptyFilteredPageProps) {
+export default async function ReceptyFilteredPage({
+    params,
+    searchParams
+}: ReceptyFilteredPageProps) {
     const { filters: filterParams } = await params;
+    const resolvedSearchParams = await searchParams;
     const filters = filterParams || [];
+    const currentPage = Number(resolvedSearchParams.page) || 1;
 
     // Parse filters from URL on server
     const parseFiltersFromUrl = (): FilterState => {
@@ -56,7 +65,7 @@ export default async function ReceptyFilteredPage({ params }: ReceptyFilteredPag
     const initialFilter = parseFiltersFromUrl();
 
     // Server-side data fetch with filters
-    const { recipes } = await fetchRecipes(1, 100, initialFilter);
+    const { recipes, total } = await fetchRecipes(currentPage, RECIPES_PER_PAGE, initialFilter);
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -75,6 +84,8 @@ export default async function ReceptyFilteredPage({ params }: ReceptyFilteredPag
             <CatalogPageClient
                 initialRecipes={recipes}
                 initialFilter={initialFilter}
+                initialTotal={total}
+                initialPage={currentPage}
             />
         </div>
     );

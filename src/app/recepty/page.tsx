@@ -6,6 +6,7 @@ import { siteConfig } from '@/config/site';
 import { CatalogPageClient } from '@/components/pages/CatalogPageClient';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/utils/metadata';
+import { RECIPES_PER_PAGE } from '@/config/pagination';
 
 export const metadata: Metadata = buildMetadata({
     title: `Рецепты кальянных миксов - ${siteConfig.brand.name}`,
@@ -13,9 +14,20 @@ export const metadata: Metadata = buildMetadata({
     url: `${siteConfig.url.current}/recepty`,
 });
 
-export default async function ReceptyPage() {
+type SearchParams = Promise<{
+    page?: string;
+}>;
+
+export default async function ReceptyPage({
+    searchParams,
+}: {
+    searchParams: SearchParams;
+}) {
+    const resolvedParams = await searchParams;
+    const currentPage = Number(resolvedParams.page) || 1;
+
     // Server-side initial data fetch
-    const { recipes } = await fetchRecipes(1, 100);
+    const { recipes, total } = await fetchRecipes(currentPage, RECIPES_PER_PAGE);
 
     // ItemList schema for catalog
     const itemListSchema = generateItemListSchema(
@@ -40,7 +52,11 @@ export default async function ReceptyPage() {
 
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-8">Рецепты Миксов</h1>
 
-            <CatalogPageClient initialRecipes={recipes} />
+            <CatalogPageClient
+                initialRecipes={recipes}
+                initialTotal={total}
+                initialPage={currentPage}
+            />
         </div>
     );
 }
